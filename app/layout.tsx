@@ -19,7 +19,7 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   title: 'Ambilas | Ambient Blog & Magazine',
-  description: 'A dark ambient blog and magazine theme',
+  description: 'A clean editorial blog and magazine theme',
   generator: 'v0.app',
   icons: {
     icon: [

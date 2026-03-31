@@ -68,7 +68,7 @@ export default function MDXRenderer({ source }: MDXRendererProps) {
                 ],
               },
             ],
-            [prettyCodePlugin, { theme: 'github-dark-dimmed', keepBackground: false }],
+            [prettyCodePlugin, { theme: 'github-light', keepBackground: false }],
           ],
         },
       }}

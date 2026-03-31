@@ -63,7 +63,7 @@ export default async function BlogPage() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {editorsChoicePosts.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post.id} post={post} simple />
               ))}
             </div>
           </div>
@@ -127,7 +127,7 @@ function Header() {
             </svg>
           </button>
           <button
-            className="hidden sm:block px-4 py-2 text-sm font-medium text-foreground glass-card rounded-lg transition-all hover:bg-white/10"
+            className="hidden sm:block px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors hover:opacity-90"
           >
             Subscribe
           </button>
@@ -172,8 +172,8 @@ function Footer() {
             <Link href="/blog" className="font-serif text-xl font-semibold text-foreground">
               Ambilas
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-md">
-              A dark ambient blog and magazine theme. Discover stories and thinking across lifestyle, technology, business, and travel.
+            <p className="mt-4 text-sm text-muted-foreground max-w-md leading-relaxed">
+              A clean editorial blog and magazine layout. Discover stories and thinking across lifestyle, technology, business, and travel.
             </p>
           </div>
           
@@ -227,7 +227,7 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
         )}
         
         {/* Floating Glass Info Block */}
-        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+        <div className="absolute w-[calc(100%-16x)] bottom-4 left-4 right-4 sm:bottom-2 sm:left-2 sm:right-2">
           <div className="glass-panel rounded-2xl p-4 sm:p-5">
             <span className="inline-block mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
               {category}
@@ -243,9 +243,49 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
   )
 }
 
-function PostCard({ post, priority = false }: { post: MappedPost; priority?: boolean }) {
+function PostCard({
+  post,
+  priority = false,
+  simple = false,
+}: {
+  post: MappedPost
+  priority?: boolean
+  simple?: boolean
+}) {
   const category = post.categories?.split(',')[0] || 'Article'
   
+  if (simple) {
+    return (
+      <article className="group">
+        <Link href={`/blog/${post.slug}`} className="block">
+          <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
+            {post.coverSrc ? (
+              <Image
+                src={post.coverSrc}
+                alt=""
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                priority={priority}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
+            )}
+          </div>
+
+          <div className="mt-3">
+            <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              {category}
+            </span>
+            <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
+              {post.title}
+            </h3>
+          </div>
+        </Link>
+      </article>
+    )
+  }
+
   return (
     <article className="group relative overflow-hidden rounded-xl">
       <Link href={`/blog/${post.slug}`} className="block">

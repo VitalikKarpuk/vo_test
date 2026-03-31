@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
               
               {/* Floating Glass Info Panel */}
-              <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 lg:bottom-10 lg:left-10 lg:right-auto lg:max-w-xl">
+              <div className="absolute w-[calc(100%-16px)] bottom-4 left-4  right-4 sm:bottom-8 sm:left-8 sm:right-8 lg:bottom-2 lg:left-2 lg:right-auto">
                 <div className="glass-panel rounded-2xl p-5 sm:p-6 lg:p-8">
                   <span className="inline-block mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     {category}
@@ -150,7 +150,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Article Content */}
         <div
-          className="prose prose-invert prose-lg max-w-none animate-fade-up prose-headings:font-serif prose-headings:font-medium prose-p:text-muted-foreground prose-a:text-foreground prose-a:underline prose-strong:text-foreground"
+          className="prose prose-neutral prose-lg max-w-none animate-fade-up prose-headings:font-serif prose-headings:font-medium prose-p:text-muted-foreground prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground"
           style={{ animationDelay: '0.1s' }}
         >
           <MDXRenderer source={markdown} />

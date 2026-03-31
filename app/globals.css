@@ -5,39 +5,39 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Ambilas-inspired dark ambient palette */
-  --background: oklch(0.13 0.015 285);
-  --foreground: oklch(0.95 0.005 285);
-  --card: oklch(0.18 0.02 285);
-  --card-foreground: oklch(0.95 0.005 285);
-  --popover: oklch(0.18 0.02 285);
-  --popover-foreground: oklch(0.95 0.005 285);
-  --primary: oklch(0.95 0.005 285);
-  --primary-foreground: oklch(0.13 0.015 285);
-  --secondary: oklch(0.22 0.02 285);
-  --secondary-foreground: oklch(0.90 0.005 285);
-  --muted: oklch(0.25 0.015 285);
-  --muted-foreground: oklch(0.65 0.01 285);
-  --accent: oklch(0.45 0.12 320);
-  --accent-foreground: oklch(0.95 0.005 285);
+  /* Light editorial: white background, high-contrast text */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.22 0.02 285);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 285);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 285);
+  --primary: oklch(0.22 0.02 285);
+  --primary-foreground: oklch(0.99 0.005 285);
+  --secondary: oklch(0.96 0.008 285);
+  --secondary-foreground: oklch(0.30 0.02 285);
+  --muted: oklch(0.96 0.006 285);
+  --muted-foreground: oklch(0.48 0.02 285);
+  --accent: oklch(0.42 0.14 315);
+  --accent-foreground: oklch(0.99 0.005 285);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.28 0.02 285);
-  --input: oklch(0.22 0.02 285);
-  --ring: oklch(0.50 0.02 285);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.90 0.01 285);
+  --input: oklch(0.92 0.008 285);
+  --ring: oklch(0.55 0.02 285);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
-  --sidebar: oklch(0.15 0.015 285);
-  --sidebar-foreground: oklch(0.95 0.005 285);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.22 0.02 285);
-  --sidebar-accent-foreground: oklch(0.95 0.005 285);
-  --sidebar-border: oklch(0.28 0.02 285);
+  --sidebar: oklch(0.985 0.005 285);
+  --sidebar-foreground: oklch(0.22 0.02 285);
+  --sidebar-primary: oklch(0.22 0.02 285);
+  --sidebar-primary-foreground: oklch(0.99 0.005 285);
+  --sidebar-accent: oklch(0.96 0.008 285);
+  --sidebar-accent-foreground: oklch(0.22 0.02 285);
+  --sidebar-border: oklch(0.90 0.01 285);
   --sidebar-ring: oklch(0.708 0 0);
 }
 
@@ -207,28 +207,28 @@
   animation: fade-up 0.6s ease-out;
 }
 
-/* Ambilas-style frosted glass card */
+/* Light frosted header / chrome */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .glass-card-light {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* Dark glass panel - floating info block over images */
+/* Floating info block over images — light frosted, dark text via tokens */
 .glass-panel {
-  background: rgba(24, 23, 28, 0.85);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
 }
 
 /* Ambient glow effect */
@@ -242,7 +242,7 @@
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    rgba(79, 58, 75, 0.15) 0%,
+    oklch(0.92 0.04 315 / 0.35) 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -251,10 +251,10 @@
 
 /* Category badge styles */
 .category-badge {
-  background: rgba(255, 255, 255, 0.1);
+  background: oklch(0.96 0.008 285);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid oklch(0.90 0.01 285);
   padding: 0.25rem 0.75rem;
   font-size: 0.7rem;
   font-weight: 500;
@@ -265,7 +265,7 @@
 }
 
 .category-badge:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: oklch(0.94 0.01 285);
 }
 
 /* Overlay gradient for cards with images */

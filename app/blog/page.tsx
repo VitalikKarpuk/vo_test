@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { getAllArticles, type MappedPost } from '@/lib/graphql/articles'
 
 export const metadata: Metadata = {
-  title: 'Sage | A Minimal Blog',
-  description: 'Discover stories, thinking, and expertise from writers on any topic.',
+  title: 'Ambilas | Ambient Blog & Magazine',
+  description: 'Discover stories and thinking across lifestyle, technology, business, and travel.',
 }
 
 function formatDate(dateString: string): string {
@@ -18,15 +18,18 @@ function formatDate(dateString: string): string {
 
 export default async function BlogPage() {
   const posts = await getAllArticles()
-  const [featuredPost, ...restPosts] = posts
+  
+  // Split posts for different sections
+  const heroGridPosts = posts.slice(0, 4)
+  const editorsChoicePosts = posts.slice(4, 8)
+  const remainingPosts = posts.slice(8)
 
   // Empty state
   if (posts.length === 0) {
     return (
       <main className="min-h-screen bg-background page-transition">
         <Header />
-        <HeroSection />
-        <section className="mx-auto max-w-6xl px-6 py-20">
+        <section className="mx-auto max-w-7xl px-4 py-20">
           <EmptyState />
         </section>
         <Footer />
@@ -37,36 +40,48 @@ export default async function BlogPage() {
   return (
     <main className="min-h-screen bg-background page-transition">
       <Header />
-      <HeroSection />
+      
+      {/* Hero Grid - 4 Featured Posts */}
+      <section className="px-4 pb-8 pt-4 animate-fade-up">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {heroGridPosts.map((post, index) => (
+              <HeroCard key={post.id} post={post} priority={index < 2} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Featured Post */}
-      {featuredPost && (
-        <section className="mx-auto max-w-6xl px-6 pb-16 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          <FeaturedPostCard post={featuredPost} />
-        </section>
-      )}
-
-      {/* Latest Posts Section */}
-      {restPosts.length > 0 && (
-        <section className="mx-auto max-w-6xl px-6 pb-20">
-          <h2 className="font-serif text-2xl font-medium text-foreground mb-10 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-            Check out the latest
-          </h2>
-          
-          <nav aria-label="Blog posts">
-            <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
-              {restPosts.map((post, index) => (
-                <li key={post.id}>
-                  <PostCard post={post} priority={index < 2} />
-                </li>
+      {/* Editor's Choice Section */}
+      {editorsChoicePosts.length > 0 && (
+        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-8 flex items-center gap-3">
+              <span className="w-8 h-px bg-muted-foreground/50" />
+              {"Editor's Choice"}
+            </h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {editorsChoicePosts.map((post) => (
+                <PostCard key={post.id} post={post} />
               ))}
-            </ul>
-          </nav>
+            </div>
+          </div>
         </section>
       )}
 
-      {/* Tags Section */}
-      <TagsSection posts={posts} />
+      {/* Remaining Posts Grid */}
+      {remainingPosts.length > 0 && (
+        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+          <div className="mx-auto max-w-7xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+              {remainingPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </main>
@@ -75,33 +90,57 @@ export default async function BlogPage() {
 
 function Header() {
   return (
-    <header className="border-b border-border/50">
-      <div className="mx-auto max-w-6xl px-6 py-6">
+    <header className="sticky top-0 z-50 glass-card border-b border-border/30">
+      <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
         <Link 
           href="/blog" 
-          className="font-serif text-2xl font-medium tracking-tight text-foreground transition-opacity hover:opacity-70"
+          className="font-serif text-xl font-semibold tracking-tight text-foreground transition-opacity hover:opacity-70"
         >
-          Sage
+          Ambilas
         </Link>
+        
+        <nav className="hidden md:flex items-center gap-8">
+          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Home
+          </Link>
+          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Lifestyle
+          </Link>
+          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Technology
+          </Link>
+          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Business
+          </Link>
+          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Travel
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-4">
+          <button
+            className="p-2 text-muted-foreground transition-colors hover:text-foreground"
+            aria-label="Search"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </button>
+          <button
+            className="hidden sm:block px-4 py-2 text-sm font-medium text-foreground glass-card rounded-lg transition-all hover:bg-white/10"
+          >
+            Subscribe
+          </button>
+        </div>
       </div>
     </header>
-  )
-}
-
-function HeroSection() {
-  return (
-    <section className="mx-auto max-w-6xl px-6 py-16 text-center animate-fade-up">
-      <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl md:text-6xl text-balance">
-        Meet Sage, a minimal and creative blog
-      </h1>
-    </section>
   )
 }
 
 function EmptyState() {
   return (
     <div className="text-center py-20 animate-fade-up">
-      <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6">
+      <div className="mx-auto w-16 h-16 rounded-full glass-card flex items-center justify-center mb-6">
         <svg
           className="w-8 h-8 text-muted-foreground"
           fill="none"
@@ -124,101 +163,79 @@ function EmptyState() {
   )
 }
 
-function TagsSection({ posts }: { posts: MappedPost[] }) {
-  // Extract unique categories from posts
-  const allCategories = posts
-    .map((post) => post.categories)
-    .filter((cat): cat is string => Boolean(cat))
-    .flatMap((cat) => cat.split(',').map((c) => c.trim()))
-    .filter((cat, index, arr) => arr.indexOf(cat) === index)
-    .slice(0, 6)
-
-  const defaultTags = ['Lifestyle', 'Technology', 'Design', 'Development', 'Productivity']
-  const tags = allCategories.length > 0 ? allCategories : defaultTags
-
-  return (
-    <aside className="border-t border-border/50 bg-secondary/30">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <h3 className="font-serif text-xl font-medium text-foreground mb-6">Popular tags</h3>
-        <div className="flex flex-wrap gap-3">
-          {tags.map((tag) => (
-            <span 
-              key={tag}
-              className="border border-border/60 px-4 py-2 text-sm text-muted-foreground transition-all hover:border-foreground hover:text-foreground cursor-pointer"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </aside>
-  )
-}
-
 function Footer() {
   return (
-    <footer className="border-t border-border/50">
-      <div className="mx-auto max-w-6xl px-6 py-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          Built with care and attention to detail
-        </p>
+    <footer className="border-t border-border/30 mt-12">
+      <div className="mx-auto max-w-7xl px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <Link href="/blog" className="font-serif text-xl font-semibold text-foreground">
+              Ambilas
+            </Link>
+            <p className="mt-4 text-sm text-muted-foreground max-w-md">
+              A dark ambient blog and magazine theme. Discover stories and thinking across lifestyle, technology, business, and travel.
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-medium text-foreground mb-4">Categories</h4>
+            <ul className="space-y-2">
+              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Lifestyle</Link></li>
+              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
+              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Business</Link></li>
+              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Travel</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-medium text-foreground mb-4">Connect</h4>
+            <ul className="space-y-2">
+              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</Link></li>
+              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</Link></li>
+              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">LinkedIn</Link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="mt-12 pt-8 border-t border-border/30 text-center">
+          <p className="text-xs text-muted-foreground">
+            Built with care and attention to detail
+          </p>
+        </div>
       </div>
     </footer>
   )
 }
 
-function FeaturedPostCard({ post }: { post: MappedPost }) {
+function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boolean }) {
+  const category = post.categories?.split(',')[0] || 'Article'
+  
   return (
-    <article className="group">
-      <Link href={`/blog/${post.slug}`} className="block">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
-          {post.coverSrc && (
-            <div className="image-hover-zoom aspect-video relative overflow-hidden">
-              <Image
-                src={post.coverSrc}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
-            </div>
-          )}
-          <div className={post.coverSrc ? '' : 'lg:col-span-2'}>
-            {post.categories && (
-              <span className="text-xs uppercase tracking-wider text-accent-foreground bg-accent px-2 py-1 mr-2">
-                {post.categories.split(',')[0]}
-              </span>
-            )}
-            <time
-              dateTime={post.date}
-              className="text-sm uppercase tracking-wider text-muted-foreground"
-            >
-              {formatDate(post.date)}
-            </time>
-            <h2 className="mt-4 font-serif text-3xl font-medium leading-tight text-foreground transition-colors group-hover:text-muted-foreground sm:text-4xl text-balance">
+    <article className="group relative aspect-[16/9] overflow-hidden rounded-xl">
+      <Link href={`/blog/${post.slug}`} className="block absolute inset-0">
+        {post.coverSrc ? (
+          <Image
+            src={post.coverSrc}
+            alt=""
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority={priority}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
+        )}
+        
+        {/* Floating Glass Info Block */}
+        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+          <div className="glass-panel rounded-2xl p-4 sm:p-5">
+            <span className="inline-block mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              {category}
+            </span>
+            
+            <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-medium text-foreground leading-snug text-balance group-hover:text-accent transition-colors">
               {post.title}
             </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed line-clamp-3">
-              {post.excerpt}
-            </p>
-            <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground link-underline">
-              Read article
-              <svg
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                />
-              </svg>
-            </span>
           </div>
         </div>
       </Link>
@@ -227,39 +244,38 @@ function FeaturedPostCard({ post }: { post: MappedPost }) {
 }
 
 function PostCard({ post, priority = false }: { post: MappedPost; priority?: boolean }) {
+  const category = post.categories?.split(',')[0] || 'Article'
+  
   return (
-    <article className="group">
+    <article className="group relative overflow-hidden rounded-xl">
       <Link href={`/blog/${post.slug}`} className="block">
-        {post.coverSrc && (
-          <div className="image-hover-zoom aspect-video relative overflow-hidden mb-5">
+        {/* Image with floating glass panel */}
+        <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
+          {post.coverSrc ? (
             <Image
               src={post.coverSrc}
               alt=""
               fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               priority={priority}
             />
-          </div>
-        )}
-        <div>
-          {post.categories && (
-            <span className="text-xs uppercase tracking-wider text-accent-foreground bg-accent px-2 py-1 mr-2">
-              {post.categories.split(',')[0]}
-            </span>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
           )}
-          <time
-            dateTime={post.date}
-            className="text-xs uppercase tracking-wider text-muted-foreground"
-          >
-            {formatDate(post.date)}
-          </time>
-          <h3 className="mt-3 font-serif text-xl font-medium leading-snug text-foreground transition-colors group-hover:text-muted-foreground text-balance">
-            {post.title}
-          </h3>
-          {/* <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-3">
-            {post.excerpt}
-          </p> */}
+          
+          {/* Floating Glass Info Block */}
+          <div className="absolute bottom-3 left-3 right-3">
+            <div className="glass-panel rounded-xl p-3">
+              <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                {category}
+              </span>
+              
+              <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
+                {post.title}
+              </h3>
+            </div>
+          </div>
         </div>
       </Link>
     </article>

@@ -1,23 +1,25 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Source_Sans_3 } from 'next/font/google'
+import { DM_Sans, Lora } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const playfair = Playfair_Display({ 
-  subsets: ["latin"],
-  variable: '--font-serif',
-  display: 'swap',
-});
-
-const sourceSans = Source_Sans_3({ 
+const dmSans = DM_Sans({ 
   subsets: ["latin"],
   variable: '--font-sans',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
+const lora = Lora({ 
+  subsets: ["latin"],
+  variable: '--font-serif',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Ambilas | Ambient Blog & Magazine',
+  description: 'A dark ambient blog and magazine theme',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -44,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${sourceSans.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${lora.variable}`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />

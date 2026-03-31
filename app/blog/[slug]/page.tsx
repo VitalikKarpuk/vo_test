@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import ArticleMdx from '@/components/blog/article-mdx'
 import { getArticleById, getAllArticles } from '@/lib/graphql/articles'
-import { STRAPI_URL } from '@/lib/apollo-client'
+import MDXRenderer from '@/components/blog/mdxRenderer'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -48,6 +47,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) {
     notFound()
   }
+
+  const markdown = (post.excerpt ?? '').replace(/<br>/g, '<br />')
 
   return (
     <main className="min-h-screen bg-background page-transition">
@@ -125,8 +126,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {/* Article Content */}
-        <div style={{ animationDelay: '0.1s' }}>
-          <ArticleMdx source={post.excerpt} domain={STRAPI_URL} />
+        <div
+          className="prose prose-neutral max-w-none dark:prose-invert animate-fade-up"
+          style={{ animationDelay: '0.1s' }}
+        >
+          <MDXRenderer source={markdown} />
         </div>
 
         {/* Share & Navigation */}

@@ -102,7 +102,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
 
               {/* Floating Glass Info Panel */}
-              <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 lg:bottom-8 lg:left-8 lg:right-auto w-full">
+              <div className="absolute bottom-2 left-4 right-4 sm:bottom-2 sm:left-6 sm:right-6 lg:bottom-2 lg:left-2 lg:right-auto w-[calc(100%-16px)]">
                 <div className="glass-panel rounded-2xl p-5 sm:p-6 lg:p-8">
                   <span className="inline-flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
                     <span className="w-2 h-2 rounded-full bg-accent animate-pulse-soft" />

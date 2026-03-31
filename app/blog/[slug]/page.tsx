@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       {/* Hero Cover Image with Floating Glass Panel */}
       {post.coverSrc && (
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-up">
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto ">
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-xl shadow-black/10">
               <Image
                 src={post.coverSrc}

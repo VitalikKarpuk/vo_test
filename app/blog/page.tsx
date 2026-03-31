@@ -38,13 +38,22 @@ export default async function BlogPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background page-transition">
+    <main className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Grid - 4 Featured Posts */}
-      <section className="px-4 pb-8 pt-4 animate-fade-up">
+      {/* Hero Section with Featured Posts */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-12 pt-8">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Section intro */}
+          <div className="mb-8 animate-fade-up">
+            <p className="text-sm font-medium uppercase tracking-widest text-accent mb-2">Featured Stories</p>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium text-foreground tracking-tight text-balance">
+              Discover the Latest
+            </h1>
+          </div>
+          
+          {/* Hero Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 stagger-children">
             {heroGridPosts.map((post, index) => (
               <HeroCard key={post.id} post={post} priority={index < 2} />
             ))}
@@ -54,14 +63,28 @@ export default async function BlogPage() {
 
       {/* Editor's Choice Section */}
       {editorsChoicePosts.length > 0 && (
-        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+        <section className="px-4 sm:px-6 lg:px-8 py-16 bg-secondary/30">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-8 flex items-center gap-3">
-              <span className="w-8 h-px bg-muted-foreground/50" />
-              {"Editor's Choice"}
-            </h2>
+            <div className="flex items-center justify-between mb-10">
+              <div className="animate-fade-up">
+                <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-3">
+                  <span className="w-8 h-px bg-accent" />
+                  {"Editor's Choice"}
+                </h2>
+                <p className="font-serif text-2xl text-foreground">Curated for You</p>
+              </div>
+              <Link 
+                href="/blog" 
+                className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group animate-fade-up"
+              >
+                View all
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </Link>
+            </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
               {editorsChoicePosts.map((post) => (
                 <PostCard key={post.id} post={post} simple />
               ))}
@@ -72,9 +95,17 @@ export default async function BlogPage() {
 
       {/* Remaining Posts Grid */}
       {remainingPosts.length > 0 && (
-        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+        <section className="px-4 sm:px-6 lg:px-8 py-16">
           <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+            <div className="mb-10 animate-fade-up">
+              <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-3">
+                <span className="w-8 h-px bg-accent" />
+                Latest Articles
+              </h2>
+              <p className="font-serif text-2xl text-foreground">More to Explore</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
               {remainingPosts.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
@@ -90,47 +121,46 @@ export default async function BlogPage() {
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 glass-card border-b border-border/30">
-      <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <Link 
-          href="/blog" 
-          className="font-serif text-xl font-semibold tracking-tight text-foreground transition-opacity hover:opacity-70"
-        >
-          Ambilas
-        </Link>
-        
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Home
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <Link 
+            href="/blog" 
+            className="font-serif text-2xl font-semibold tracking-tight text-foreground transition-all hover:text-accent"
+          >
+            Ambilas
           </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Lifestyle
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Technology
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Business
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Travel
-          </Link>
-        </nav>
+          
+          <nav className="hidden md:flex items-center gap-1">
+            {['Home', 'Lifestyle', 'Technology', 'Business', 'Travel'].map((item) => (
+              <Link 
+                key={item}
+                href="/blog" 
+                className="px-4 py-2 text-sm text-muted-foreground transition-all hover:text-foreground hover:bg-secondary/50 rounded-full"
+              >
+                {item}
+              </Link>
+            ))}
+          </nav>
 
-        <div className="flex items-center gap-4">
-          <button
-            className="p-2 text-muted-foreground transition-colors hover:text-foreground"
-            aria-label="Search"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </button>
-          <button
-            className="hidden sm:block px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors hover:opacity-90"
-          >
-            Subscribe
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              className="p-2.5 text-muted-foreground transition-all hover:text-foreground hover:bg-secondary/50 rounded-full"
+              aria-label="Search"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </button>
+            <button
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-primary-foreground bg-foreground rounded-full transition-all hover:scale-105 hover:shadow-lg"
+            >
+              Subscribe
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -165,42 +195,71 @@ function EmptyState() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/30 mt-12">
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <Link href="/blog" className="font-serif text-xl font-semibold text-foreground">
+    <footer className="bg-foreground text-primary-foreground mt-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <Link href="/blog" className="font-serif text-3xl font-semibold text-primary-foreground">
               Ambilas
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-md leading-relaxed">
+            <p className="mt-5 text-sm text-primary-foreground/70 max-w-sm leading-relaxed">
               A clean editorial blog and magazine layout. Discover stories and thinking across lifestyle, technology, business, and travel.
             </p>
+            
+            {/* Newsletter */}
+            <div className="mt-8">
+              <p className="text-sm font-medium text-primary-foreground mb-3">Stay updated</p>
+              <div className="flex gap-2">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-2.5 bg-primary-foreground/10 border border-primary-foreground/20 rounded-full text-sm text-primary-foreground placeholder:text-primary-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary-foreground/30"
+                />
+                <button className="px-5 py-2.5 bg-primary-foreground text-foreground rounded-full text-sm font-medium transition-all hover:scale-105">
+                  Subscribe
+                </button>
+              </div>
+            </div>
           </div>
           
-          <div>
-            <h4 className="text-sm font-medium text-foreground mb-4">Categories</h4>
-            <ul className="space-y-2">
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Lifestyle</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Business</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Travel</Link></li>
+          {/* Categories */}
+          <div className="md:col-span-3 md:col-start-7">
+            <h4 className="text-sm font-semibold text-primary-foreground uppercase tracking-wider mb-5">Categories</h4>
+            <ul className="space-y-3">
+              {['Lifestyle', 'Technology', 'Business', 'Travel', 'Culture'].map((item) => (
+                <li key={item}>
+                  <Link href="/blog" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           
-          <div>
-            <h4 className="text-sm font-medium text-foreground mb-4">Connect</h4>
-            <ul className="space-y-2">
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</Link></li>
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</Link></li>
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">LinkedIn</Link></li>
+          {/* Connect */}
+          <div className="md:col-span-2">
+            <h4 className="text-sm font-semibold text-primary-foreground uppercase tracking-wider mb-5">Connect</h4>
+            <ul className="space-y-3">
+              {['Twitter', 'Instagram', 'LinkedIn', 'RSS Feed'].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-border/30 text-center">
-          <p className="text-xs text-muted-foreground">
-            Built with care and attention to detail
+        <div className="mt-16 pt-8 border-t border-primary-foreground/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-primary-foreground/50">
+            2024 Ambilas. Built with care and attention to detail.
           </p>
+          <div className="flex items-center gap-6">
+            <Link href="#" className="text-xs text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">Privacy</Link>
+            <Link href="#" className="text-xs text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">Terms</Link>
+          </div>
         </div>
       </div>
     </footer>
@@ -211,14 +270,14 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
   const category = post.categories?.split(',')[0] || 'Article'
   
   return (
-    <article className="group relative aspect-[16/9] overflow-hidden rounded-xl">
+    <article className="group relative aspect-[16/9] overflow-hidden rounded-2xl shadow-lg shadow-black/5 card-lift">
       <Link href={`/blog/${post.slug}`} className="block absolute inset-0">
         {post.coverSrc ? (
           <Image
             src={post.coverSrc}
             alt=""
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={priority}
           />
@@ -227,15 +286,26 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
         )}
         
         {/* Floating Glass Info Block */}
-        <div className="absolute w-[calc(100%-16x)] bottom-4 left-4 right-4 sm:bottom-2 sm:left-2 sm:right-2">
-          <div className="glass-panel rounded-2xl p-4 sm:p-5">
-            <span className="inline-block mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5">
+          <div className="glass-panel rounded-2xl p-4 sm:p-5 lg:p-6">
+            <span className="inline-flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse-soft" />
               {category}
             </span>
             
-            <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-medium text-foreground leading-snug text-balance group-hover:text-accent transition-colors">
+            <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-medium text-foreground leading-snug text-balance">
               {post.title}
             </h2>
+            
+            <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+              <span>{formatDate(post.date)}</span>
+              {post.author && (
+                <>
+                  <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+                  <span>{post.author}</span>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </Link>
@@ -258,13 +328,13 @@ function PostCard({
     return (
       <article className="group">
         <Link href={`/blog/${post.slug}`} className="block">
-          <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
+          <div className="aspect-[16/9] relative overflow-hidden rounded-xl shadow-md shadow-black/5 card-lift">
             {post.coverSrc ? (
               <Image
                 src={post.coverSrc}
                 alt=""
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 priority={priority}
               />
@@ -273,13 +343,15 @@ function PostCard({
             )}
           </div>
 
-          <div className="mt-3">
-            <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          <div className="mt-4">
+            <span className="inline-flex items-center gap-1.5 mb-2 text-[10px] font-semibold uppercase tracking-wider text-accent">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
               {category}
             </span>
-            <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
+            <h3 className="font-serif text-base font-medium text-foreground leading-snug line-clamp-2 text-balance transition-colors group-hover:text-accent">
               {post.title}
             </h3>
+            <p className="mt-2 text-xs text-muted-foreground">{formatDate(post.date)}</p>
           </div>
         </Link>
       </article>
@@ -287,17 +359,17 @@ function PostCard({
   }
 
   return (
-    <article className="group relative overflow-hidden rounded-xl">
+    <article className="group relative overflow-hidden rounded-2xl shadow-lg shadow-black/5 card-lift">
       <Link href={`/blog/${post.slug}`} className="block">
         {/* Image with floating glass panel */}
-        <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
+        <div className="aspect-[16/9] relative overflow-hidden">
           {post.coverSrc ? (
             <Image
               src={post.coverSrc}
               alt=""
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={priority}
             />
           ) : (
@@ -305,15 +377,18 @@ function PostCard({
           )}
           
           {/* Floating Glass Info Block */}
-          <div className="absolute bottom-3 left-3 right-3">
-            <div className="glass-panel rounded-xl p-3">
-              <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4">
+            <div className="glass-panel rounded-xl p-3 sm:p-4">
+              <span className="inline-flex items-center gap-1.5 mb-2 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                 {category}
               </span>
               
-              <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
+              <h3 className="font-serif text-sm sm:text-base font-medium text-foreground leading-snug line-clamp-2 text-balance">
                 {post.title}
               </h3>
+              
+              <p className="mt-2 text-xs text-muted-foreground">{formatDate(post.date)}</p>
             </div>
           </div>
         </div>

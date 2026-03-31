@@ -54,42 +54,44 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-background page-transition">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-card border-b border-border/30">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-          <Link 
-            href="/blog" 
-            className="font-serif text-xl font-semibold tracking-tight text-foreground transition-opacity hover:opacity-70"
-          >
-            Ambilas
-          </Link>
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              aria-hidden="true"
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link 
+              href="/blog" 
+              className="font-serif text-2xl font-semibold tracking-tight text-foreground transition-all hover:text-accent"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-              />
-            </svg>
-            Back to blog
-          </Link>
+              Ambilas
+            </Link>
+            <Link
+              href="/blog"
+              className="group inline-flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground transition-all hover:text-foreground hover:bg-secondary/50 rounded-full"
+            >
+              <svg
+                className="h-4 w-4 transition-transform group-hover:-translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                />
+              </svg>
+              Back to blog
+            </Link>
+          </div>
         </div>
       </header>
 
       {/* Hero Cover Image with Floating Glass Panel */}
       {post.coverSrc && (
-        <div className="relative w-full animate-fade-in px-4 py-8 md:px-8 md:py-12">
+        <div className="relative w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-up">
           <div className="mx-auto max-w-6xl">
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-xl shadow-black/10">
               <Image
                 src={post.coverSrc}
                 alt={`Cover image for ${post.title}`}
@@ -100,9 +102,10 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
               
               {/* Floating Glass Info Panel */}
-              <div className="absolute w-[calc(100%-16px)] bottom-4 left-4  right-4 sm:bottom-8 sm:left-8 sm:right-8 lg:bottom-2 lg:left-2 lg:right-auto">
+              <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 lg:bottom-8 lg:left-8 lg:right-auto lg:max-w-xl">
                 <div className="glass-panel rounded-2xl p-5 sm:p-6 lg:p-8">
-                  <span className="inline-block mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  <span className="inline-flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+                    <span className="w-2 h-2 rounded-full bg-accent animate-pulse-soft" />
                     {category}
                   </span>
                   
@@ -112,7 +115,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                   
                   <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
                     {post.author && (
-                      <span>By <span className="text-foreground">{post.author}</span></span>
+                      <>
+                        <span>By <span className="text-foreground font-medium">{post.author}</span></span>
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+                      </>
                     )}
                     <time dateTime={post.date}>
                       {formatDate(post.date)}
@@ -125,11 +131,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       )}
 
-      <article className={`mx-auto max-w-2xl px-6 ${post.coverSrc ? 'pt-8' : 'pt-16'}`}>
+      <article className={`mx-auto max-w-2xl px-4 sm:px-6 ${post.coverSrc ? 'pt-10' : 'pt-16'}`}>
         {/* Article Header - only shown if no cover image */}
         {!post.coverSrc && (
           <header className="mb-12 animate-fade-up">
-            <span className="inline-block mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <span className="inline-flex items-center gap-2 mb-4 text-xs font-semibold uppercase tracking-wider text-accent">
+              <span className="w-2 h-2 rounded-full bg-accent" />
               {category}
             </span>
             
@@ -139,7 +146,10 @@ export default async function BlogPostPage({ params }: PageProps) {
             
             <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
               {post.author && (
-                <span>By <span className="text-foreground">{post.author}</span></span>
+                <>
+                  <span>By <span className="text-foreground font-medium">{post.author}</span></span>
+                  <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+                </>
               )}
               <time dateTime={post.date}>
                 {formatDate(post.date)}
@@ -150,18 +160,18 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Article Content */}
         <div
-          className="prose prose-neutral prose-lg max-w-none animate-fade-up prose-headings:font-serif prose-headings:font-medium prose-p:text-muted-foreground prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground"
+          className="prose prose-neutral prose-lg max-w-none animate-fade-up prose-headings:font-serif prose-headings:font-medium prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-li:text-muted-foreground"
           style={{ animationDelay: '0.1s' }}
         >
           <MDXRenderer source={markdown} />
         </div>
 
         {/* Share & Navigation */}
-        <footer className="mt-20 pt-10 border-t border-border/30 pb-20 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <footer className="mt-16 pt-10 border-t border-border/40 pb-20 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+          <div className="flex items-center justify-between flex-wrap gap-6">
             <Link
               href="/blog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground"
+              className="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground bg-secondary/50 rounded-full transition-all hover:bg-secondary"
             >
               <svg
                 className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1"
@@ -177,14 +187,14 @@ export default async function BlogPostPage({ params }: PageProps) {
                   d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
                 />
               </svg>
-              <span className="link-underline">Back to all posts</span>
+              Back to all posts
             </Link>
             
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">Share</span>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <button 
-                  className="p-2 glass-card rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+                  className="p-2.5 bg-secondary/50 rounded-full text-muted-foreground transition-all hover:text-foreground hover:bg-secondary hover:scale-110"
                   aria-label="Share on Twitter"
                 >
                   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -192,7 +202,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </svg>
                 </button>
                 <button 
-                  className="p-2 glass-card rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+                  className="p-2.5 bg-secondary/50 rounded-full text-muted-foreground transition-all hover:text-foreground hover:bg-secondary hover:scale-110"
                   aria-label="Share on LinkedIn"
                 >
                   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -200,7 +210,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </svg>
                 </button>
                 <button 
-                  className="p-2 glass-card rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+                  className="p-2.5 bg-secondary/50 rounded-full text-muted-foreground transition-all hover:text-foreground hover:bg-secondary hover:scale-110"
                   aria-label="Copy link"
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">

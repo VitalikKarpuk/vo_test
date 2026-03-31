@@ -85,45 +85,68 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </header>
 
-      {/* Hero Cover Image */}
+      {/* Hero Cover Image with Floating Glass Panel */}
       {post.coverSrc && (
-        <div className="relative h-[50vh] min-h-[400px] max-h-[600px] w-full animate-fade-in">
-          <Image
-            src={post.coverSrc}
-            alt={`Cover image for ${post.title}`}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 hero-card-overlay" />
+        <div className="relative w-full animate-fade-in px-4 py-8 md:px-8 md:py-12">
+          <div className="mx-auto max-w-6xl">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+              <Image
+                src={post.coverSrc}
+                alt={`Cover image for ${post.title}`}
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+              />
+              
+              {/* Floating Glass Info Panel */}
+              <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 lg:bottom-10 lg:left-10 lg:right-auto lg:max-w-xl">
+                <div className="glass-panel rounded-2xl p-5 sm:p-6 lg:p-8">
+                  <span className="inline-block mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    {category}
+                  </span>
+                  
+                  <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-medium text-foreground leading-snug text-balance">
+                    {post.title}
+                  </h1>
+                  
+                  <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+                    {post.author && (
+                      <span>By <span className="text-foreground">{post.author}</span></span>
+                    )}
+                    <time dateTime={post.date}>
+                      {formatDate(post.date)}
+                    </time>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      <article className={`mx-auto max-w-2xl px-6 ${post.coverSrc ? '-mt-40 relative z-10' : 'pt-16'}`}>
-        {/* Article Header */}
-        <header className="mb-12 animate-fade-up">
-          <span className="category-badge text-foreground mb-4 inline-block">
-            {category}
-          </span>
-          
-          <time
-            dateTime={post.date}
-            className="block text-sm text-muted-foreground mt-4"
-          >
-            {formatDate(post.date)}
-          </time>
-          
-          <h1 className="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-foreground leading-tight text-balance">
-            {post.title}
-          </h1>
-          
-          {post.author && (
-            <p className="mt-6 text-muted-foreground">
-              By <span className="text-foreground">{post.author}</span>
-            </p>
-          )}
-        </header>
+      <article className={`mx-auto max-w-2xl px-6 ${post.coverSrc ? 'pt-8' : 'pt-16'}`}>
+        {/* Article Header - only shown if no cover image */}
+        {!post.coverSrc && (
+          <header className="mb-12 animate-fade-up">
+            <span className="inline-block mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              {category}
+            </span>
+            
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-foreground leading-tight text-balance">
+              {post.title}
+            </h1>
+            
+            <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
+              {post.author && (
+                <span>By <span className="text-foreground">{post.author}</span></span>
+              )}
+              <time dateTime={post.date}>
+                {formatDate(post.date)}
+              </time>
+            </div>
+          </header>
+        )}
 
         {/* Article Content */}
         <div

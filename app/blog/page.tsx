@@ -211,7 +211,7 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
   const category = post.categories?.split(',')[0] || 'Article'
   
   return (
-    <article className="group relative aspect-[16/10] overflow-hidden rounded-xl">
+    <article className="group relative aspect-[16/9] overflow-hidden rounded-xl">
       <Link href={`/blog/${post.slug}`} className="block absolute inset-0">
         {post.coverSrc ? (
           <Image
@@ -226,18 +226,17 @@ function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boo
           <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
         )}
         
-        {/* Overlay */}
-        <div className="absolute inset-0 hero-card-overlay" />
-        
-        {/* Content */}
-        <div className="absolute inset-0 p-6 flex flex-col justify-end">
-          <span className="category-badge w-fit mb-3 text-foreground">
-            {category}
-          </span>
-          
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-medium text-white leading-tight text-balance group-hover:underline decoration-1 underline-offset-4">
-            {post.title}
-          </h2>
+        {/* Floating Glass Info Block */}
+        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+          <div className="glass-panel rounded-2xl p-4 sm:p-5">
+            <span className="inline-block mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              {category}
+            </span>
+            
+            <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-medium text-foreground leading-snug text-balance group-hover:text-accent transition-colors">
+              {post.title}
+            </h2>
+          </div>
         </div>
       </Link>
     </article>
@@ -248,10 +247,10 @@ function PostCard({ post, priority = false }: { post: MappedPost; priority?: boo
   const category = post.categories?.split(',')[0] || 'Article'
   
   return (
-    <article className="group relative overflow-hidden rounded-xl glass-card">
+    <article className="group relative overflow-hidden rounded-xl">
       <Link href={`/blog/${post.slug}`} className="block">
-        {/* Image */}
-        <div className="aspect-[4/3] relative overflow-hidden">
+        {/* Image with floating glass panel */}
+        <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
           {post.coverSrc ? (
             <Image
               src={post.coverSrc}
@@ -264,21 +263,19 @@ function PostCard({ post, priority = false }: { post: MappedPost; priority?: boo
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
           )}
-          <div className="absolute inset-0 card-overlay opacity-60" />
           
-          {/* Category on image */}
-          <div className="absolute top-4 left-4">
-            <span className="category-badge text-foreground">
-              {category}
-            </span>
+          {/* Floating Glass Info Block */}
+          <div className="absolute bottom-3 left-3 right-3">
+            <div className="glass-panel rounded-xl p-3">
+              <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                {category}
+              </span>
+              
+              <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
+                {post.title}
+              </h3>
+            </div>
           </div>
-        </div>
-        
-        {/* Content */}
-        <div className="p-4">
-          <h3 className="font-serif text-base font-medium text-foreground leading-snug line-clamp-2 group-hover:underline decoration-1 underline-offset-2 text-balance">
-            {post.title}
-          </h3>
         </div>
       </Link>
     </article>

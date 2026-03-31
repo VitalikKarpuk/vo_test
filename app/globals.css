@@ -222,6 +222,15 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Dark glass panel - floating info block over images */
+.glass-panel {
+  background: rgba(24, 23, 28, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
 /* Ambient glow effect */
 .ambient-glow {
   position: relative;

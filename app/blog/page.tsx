@@ -2,10 +2,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getAllArticles, type MappedPost } from '@/lib/graphql/articles'
+import FeaturedSlider from '@/components/featured-slider'
+import CategoryBadge from '@/components/category-badge'
+import CategoryFilter from '@/components/category-filter'
 
 export const metadata: Metadata = {
-  title: 'Ambilas | Ambient Blog & Magazine',
-  description: 'Discover stories and thinking across lifestyle, technology, business, and travel.',
+  title: 'AI Blog | Latest Articles on Artificial Intelligence',
+  description: 'Discover the latest insights, tutorials, and news about AI, machine learning, and technology.',
 }
 
 function formatDate(dateString: string): string {
@@ -18,16 +21,24 @@ function formatDate(dateString: string): string {
 
 export default async function BlogPage() {
   const posts = await getAllArticles()
-  
-  // Split posts for different sections
-  const heroGridPosts = posts.slice(0, 4)
-  const editorsChoicePosts = posts.slice(4, 8)
-  const remainingPosts = posts.slice(8)
 
-  // Empty state
+  // Extract unique categories from all posts (sorted alphabetically)
+  const allCategories = Array.from(
+    new Set(
+      posts
+        .flatMap((p) => (p.categories ? p.categories.split(',').map((c) => c.trim()) : []))
+        .filter(Boolean)
+    )
+  ).sort()
+
+  // Split posts: first 5 go to slider, rest to grids
+  const sliderPosts = posts.slice(0, 5)
+  const latestPosts = posts.slice(5, 11)
+  const remainingPosts = posts.slice(11)
+
   if (posts.length === 0) {
     return (
-      <main className="min-h-screen bg-background page-transition">
+      <main className="min-h-screen bg-background">
         <Header />
         <section className="mx-auto max-w-7xl px-4 py-20">
           <EmptyState />
@@ -38,53 +49,199 @@ export default async function BlogPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background page-transition">
+    <main className="min-h-screen bg-background">
       <Header />
-      
-      {/* Hero Grid - 4 Featured Posts */}
-      <section className="px-4 pb-8 pt-4 animate-fade-up">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {heroGridPosts.map((post, index) => (
-              <HeroCard key={post.id} post={post} priority={index < 2} />
-            ))}
+
+      {/* Featured Slider */}
+      {sliderPosts.length > 0 && (
+        <section className="px-4 pt-8 pb-10 animate-fade-up">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading
+              color="primary"
+              label="Featured"
+            />
+            <FeaturedSlider posts={sliderPosts} />
+          </div>
+        </section>
+      )}
+
+      {/* Latest Articles — 3-column grid */}
+      {latestPosts.length > 0 && (
+        <section className="px-4 py-10 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading color="primary" label="Latest Articles" />
+
+            {/* Category filter row */}
+            <div className="mb-7">
+              <CategoryFilter categories={allCategories} />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {latestPosts.map((post, index) => (
+                <PostCard key={post.id} post={post} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* More to Explore — 4-column grid */}
+      {remainingPosts.length > 0 && (
+        <section className="px-4 py-10 bg-muted/30 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading color="link" label="More to Explore" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {remainingPosts.map((post, index) => (
+                <PostCard key={post.id} post={post} index={index} compact />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Newsletter CTA */}
+      <section className="px-4 py-20 animate-fade-up" style={{ animationDelay: '0.25s' }}>
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="glass-panel rounded-3xl p-10 md:p-16 ai-card">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl ai-gradient flex items-center justify-center animate-float">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"
+                />
+              </svg>
+            </div>
+            <h3 className="font-serif text-2xl md:text-3xl font-semibold text-foreground mb-4 text-balance">
+              Stay Updated with AI Insights
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              Get the latest articles on artificial intelligence, machine learning, and tech trends
+              delivered to your inbox.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-5 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              />
+              <button className="btn-primary rounded-xl whitespace-nowrap">Subscribe</button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Editor's Choice Section */}
-      {editorsChoicePosts.length > 0 && (
-        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-8 flex items-center gap-3">
-              <span className="w-8 h-px bg-muted-foreground/50" />
-              {"Editor's Choice"}
-            </h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {editorsChoicePosts.map((post) => (
-                <PostCard key={post.id} post={post} simple />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Remaining Posts Grid */}
-      {remainingPosts.length > 0 && (
-        <section className="px-4 py-12 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-          <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
-              {remainingPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       <Footer />
     </main>
+  )
+}
+
+// ─── Sub-components ────────────────────────────────────────────────────────────
+
+function SectionHeading({ label, color }: { label: string; color: 'primary' | 'link' }) {
+  const colorClass =
+    color === 'primary'
+      ? 'bg-primary text-primary'
+      : 'bg-[hsl(var(--link))] text-[hsl(var(--link))]'
+  const gradientClass =
+    color === 'primary'
+      ? 'from-primary/30'
+      : 'from-[hsl(var(--link))]/30'
+
+  return (
+    <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-2">
+        <span className={`w-2 h-2 rounded-full ${colorClass.split(' ')[0]} animate-pulse-glow`} />
+        <h2 className={`text-sm font-semibold uppercase tracking-widest ${colorClass.split(' ')[1]}`}>
+          {label}
+        </h2>
+      </div>
+      <div className={`flex-1 h-px bg-gradient-to-r ${gradientClass} to-transparent`} />
+    </div>
+  )
+}
+
+function PostCard({
+  post,
+  index,
+  compact = false,
+}: {
+  post: MappedPost
+  index: number
+  compact?: boolean
+}) {
+  const category = post.categories?.split(',')[0]?.trim() || null
+
+  // Strip MDX/markdown syntax for plain text excerpt
+  const plainExcerpt = (post.excerpt || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]+`/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    .replace(/\n+/g, ' ')
+    .trim()
+
+  return (
+    <article
+      className="group ai-card rounded-2xl overflow-hidden bg-card border border-border/50 animate-fade-up flex flex-col"
+      style={{ animationDelay: `${0.05 + index * 0.04}s` }}
+    >
+      <Link href={`/blog/${post.slug}`} className="flex flex-col flex-1">
+        {/* 16:9 image — no overlay, no badge on top */}
+        <div className="relative w-full aspect-video overflow-hidden">
+          {post.coverSrc ? (
+            <Image
+              src={post.coverSrc}
+              alt={post.title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50" />
+          )}
+        </div>
+
+        {/* Text content */}
+        <div className="p-4 md:p-5 flex flex-col flex-1">
+          {/* Category badge inside text block, above title */}
+          {category && (
+            <div className="mb-2">
+              <CategoryBadge category={category} variant="default" />
+            </div>
+          )}
+
+          <h3 className="font-serif text-base font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-primary transition-colors mb-2">
+            {post.title}
+          </h3>
+
+          {!compact && plainExcerpt && (
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
+              {plainExcerpt}
+            </p>
+          )}
+
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-auto pt-3 border-t border-border/40">
+            {post.author && (
+              <>
+                <span className="font-medium text-foreground">{post.author}</span>
+                <span>·</span>
+              </>
+            )}
+            <time>{formatDate(post.date)}</time>
+          </div>
+        </div>
+      </Link>
+    </article>
   )
 }
 
@@ -92,43 +249,60 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 glass-card border-b border-border/30">
       <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <Link 
-          href="/blog" 
-          className="font-serif text-xl font-semibold tracking-tight text-foreground transition-opacity hover:opacity-70"
-        >
-          Ambilas
+        <Link href="/blog" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center group-hover:animate-pulse-glow transition-all">
+            <svg
+              className="w-4 h-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+              />
+            </svg>
+          </div>
+          <span className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            AI Blog
+          </span>
         </Link>
-        
+
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Home
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Lifestyle
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Technology
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Business
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Travel
-          </Link>
+          {['Articles', 'Tutorials', 'News', 'Research'].map((item) => (
+            <Link
+              key={item}
+              href="/blog"
+              className="text-sm text-muted-foreground transition-colors hover:text-primary relative group"
+            >
+              {item}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-4">
           <button
-            className="p-2 text-muted-foreground transition-colors hover:text-foreground"
+            className="p-2 text-muted-foreground transition-colors hover:text-primary"
             aria-label="Search"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
             </svg>
           </button>
-          <button
-            className="hidden sm:block px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors hover:opacity-90"
-          >
+          <button className="btn-primary text-sm py-2 px-4 rounded-xl hidden sm:block">
             Subscribe
           </button>
         </div>
@@ -140,9 +314,9 @@ function Header() {
 function EmptyState() {
   return (
     <div className="text-center py-20 animate-fade-up">
-      <div className="mx-auto w-16 h-16 rounded-full glass-card flex items-center justify-center mb-6">
+      <div className="mx-auto w-20 h-20 rounded-2xl ai-gradient flex items-center justify-center mb-6 animate-float">
         <svg
-          className="w-8 h-8 text-muted-foreground"
+          className="w-10 h-10 text-white"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -155,9 +329,10 @@ function EmptyState() {
           />
         </svg>
       </div>
-      <h3 className="font-serif text-xl font-medium text-foreground mb-2">No articles yet</h3>
-      <p className="text-muted-foreground">
-        Check back soon for new content, or make sure your Strapi backend is connected.
+      <h3 className="font-serif text-2xl font-medium text-foreground mb-3">No articles yet</h3>
+      <p className="text-muted-foreground max-w-md mx-auto">
+        Check back soon for new content about AI and technology, or make sure your backend is
+        connected.
       </p>
     </div>
   )
@@ -165,159 +340,75 @@ function EmptyState() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/30 mt-12">
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-border/30 bg-muted/20">
+      <div className="mx-auto max-w-7xl px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <Link href="/blog" className="font-serif text-xl font-semibold text-foreground">
-              Ambilas
+            <Link href="/blog" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+                  />
+                </svg>
+              </div>
+              <span className="font-serif text-xl font-semibold text-foreground">AI Blog</span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-md leading-relaxed">
-              A clean editorial blog and magazine layout. Discover stories and thinking across lifestyle, technology, business, and travel.
+            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+              Your source for the latest insights on artificial intelligence, machine learning, and
+              emerging technologies. Stay informed and inspired.
             </p>
           </div>
-          
+
           <div>
-            <h4 className="text-sm font-medium text-foreground mb-4">Categories</h4>
-            <ul className="space-y-2">
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Lifestyle</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Business</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Travel</Link></li>
+            <h4 className="text-sm font-semibold text-foreground mb-4">Categories</h4>
+            <ul className="space-y-3">
+              {['Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'].map((item) => (
+                <li key={item}>
+                  <Link
+                    href="/blog"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          
+
           <div>
-            <h4 className="text-sm font-medium text-foreground mb-4">Connect</h4>
-            <ul className="space-y-2">
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</Link></li>
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</Link></li>
-              <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">LinkedIn</Link></li>
+            <h4 className="text-sm font-semibold text-foreground mb-4">Connect</h4>
+            <ul className="space-y-3">
+              {['Twitter', 'GitHub', 'LinkedIn', 'Discord'].map((item) => (
+                <li key={item}>
+                  <Link
+                    href="#"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        
-        <div className="mt-12 pt-8 border-t border-border/30 text-center">
-          <p className="text-xs text-muted-foreground">
-            Built with care and attention to detail
-          </p>
+
+        <div className="mt-12 pt-8 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground">Built with AI and attention to detail</p>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <span>Powered by</span>
+            <span className="ai-gradient-text font-semibold">Next.js</span>
+          </div>
         </div>
       </div>
     </footer>
-  )
-}
-
-function HeroCard({ post, priority = false }: { post: MappedPost; priority?: boolean }) {
-  const category = post.categories?.split(',')[0] || 'Article'
-  
-  return (
-    <article className="group relative aspect-[16/9] overflow-hidden rounded-xl">
-      <Link href={`/blog/${post.slug}`} className="block absolute inset-0">
-        {post.coverSrc ? (
-          <Image
-            src={post.coverSrc}
-            alt=""
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={priority}
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
-        )}
-        
-        {/* Floating Glass Info Block */}
-        <div className="absolute w-[calc(100%-16x)] bottom-4 left-4 right-4 sm:bottom-2 sm:left-2 sm:right-2">
-          <div className="glass-panel rounded-2xl p-4 sm:p-5">
-            <span className="inline-block mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {category}
-            </span>
-            
-            <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-medium text-foreground leading-snug text-balance group-hover:text-accent transition-colors">
-              {post.title}
-            </h2>
-          </div>
-        </div>
-      </Link>
-    </article>
-  )
-}
-
-function PostCard({
-  post,
-  priority = false,
-  simple = false,
-}: {
-  post: MappedPost
-  priority?: boolean
-  simple?: boolean
-}) {
-  const category = post.categories?.split(',')[0] || 'Article'
-  
-  if (simple) {
-    return (
-      <article className="group">
-        <Link href={`/blog/${post.slug}`} className="block">
-          <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
-            {post.coverSrc ? (
-              <Image
-                src={post.coverSrc}
-                alt=""
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                priority={priority}
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
-            )}
-          </div>
-
-          <div className="mt-3">
-            <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-              {category}
-            </span>
-            <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
-              {post.title}
-            </h3>
-          </div>
-        </Link>
-      </article>
-    )
-  }
-
-  return (
-    <article className="group relative overflow-hidden rounded-xl">
-      <Link href={`/blog/${post.slug}`} className="block">
-        {/* Image with floating glass panel */}
-        <div className="aspect-[16/9] relative overflow-hidden rounded-xl">
-          {post.coverSrc ? (
-            <Image
-              src={post.coverSrc}
-              alt=""
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              priority={priority}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
-          )}
-          
-          {/* Floating Glass Info Block */}
-          <div className="absolute bottom-3 left-3 right-3">
-            <div className="glass-panel rounded-xl p-3">
-              <span className="inline-block mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                {category}
-              </span>
-              
-              <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-accent transition-colors">
-                {post.title}
-              </h3>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </article>
   )
 }

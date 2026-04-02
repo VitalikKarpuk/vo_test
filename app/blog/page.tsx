@@ -176,7 +176,19 @@ function PostCard({
   index: number
   compact?: boolean
 }) {
-  const category = post.categories?.split(',')[0] || 'Article'
+  const category = post.categories?.split(',')[0]?.trim() || null
+
+  // Strip MDX/markdown syntax for plain text excerpt
+  const plainExcerpt = (post.excerpt || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]+`/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    .replace(/\n+/g, ' ')
+    .trim()
 
   return (
     <article
@@ -184,7 +196,7 @@ function PostCard({
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
     >
       <Link href={`/blog/${post.slug}`} className="flex flex-col flex-1">
-        {/* 16:9 image */}
+        {/* 16:9 image — no overlay, no badge on top */}
         <div className="relative w-full aspect-video overflow-hidden">
           {post.coverSrc ? (
             <Image
@@ -197,22 +209,24 @@ function PostCard({
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50" />
           )}
-
-          {/* Category badge — no dark overlay */}
-          <div className="absolute top-3 left-3">
-            <CategoryBadge category={category} variant="default" />
-          </div>
         </div>
 
         {/* Text content */}
         <div className="p-4 md:p-5 flex flex-col flex-1">
+          {/* Category badge inside text block, above title */}
+          {category && (
+            <div className="mb-2">
+              <CategoryBadge category={category} variant="default" />
+            </div>
+          )}
+
           <h3 className="font-serif text-base font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-primary transition-colors mb-2">
             {post.title}
           </h3>
 
-          {!compact && post.excerpt && (
+          {!compact && plainExcerpt && (
             <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
-              {post.excerpt}
+              {plainExcerpt}
             </p>
           )}
 

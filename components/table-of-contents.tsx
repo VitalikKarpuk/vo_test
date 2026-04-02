@@ -58,7 +58,9 @@ export default function TableOfContents({ contentSelector = '.article-body' }: P
     e.preventDefault()
     const el = document.getElementById(id)
     if (!el) return
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const offset = 96 // top-24 = 6rem = 96px
+    const top = el.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top, behavior: 'smooth' })
     setActiveId(id)
   }
 
@@ -81,7 +83,7 @@ export default function TableOfContents({ contentSelector = '.article-body' }: P
             {headings.map((h) => {
               const isActive = h.id === activeId
               const indent =
-                h.level === 2 ? 'pl-0' : h.level === 3 ? 'pl-3' : 'pl-5'
+                h.level === 2 ? 'pl-1' : h.level === 3 ? 'pl-3' : 'pl-5'
 
               return (
                 <li key={h.id}>

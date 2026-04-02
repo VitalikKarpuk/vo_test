@@ -6,6 +6,7 @@ import { getArticleById, getAllArticles, type MappedPost } from '@/lib/graphql/a
 import MDXRenderer from '@/components/blog/mdxRenderer'
 import CategoryBadge from '@/components/category-badge'
 import TableOfContents from '@/components/table-of-contents'
+import ScrollProgress from '@/components/scroll-progress'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -66,6 +67,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-background">
+      <ScrollProgress />
+      
       {/* ── Sticky header ── */}
       <header className="sticky top-0 z-50 glass-card border-b border-border/30">
         <div className="mx-auto max-w-7xl px-4 py-3.5 flex items-center justify-between">
@@ -218,7 +221,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
 
           {/* ToC sidebar — hidden on mobile, shows from lg */}
-          <div className="hidden lg:block w-60 shrink-0">
+          <div className="hidden lg:block w-60 shrink-0 sticky top-24">
             <TableOfContents contentSelector=".article-body" />
           </div>
 

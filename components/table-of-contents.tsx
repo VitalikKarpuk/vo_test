@@ -65,7 +65,7 @@ export default function TableOfContents({ contentSelector = '.article-body' }: P
   if (headings.length === 0) return null
 
   return (
-    <aside className="w-full">
+    <aside className="w-full sticky top-24">
       <div className="sticky top-24">
         {/* Header */}
         <div className="flex items-center gap-2 mb-4">
@@ -144,9 +144,6 @@ function ScrollProgress() {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <span className="text-[10px] font-semibold text-muted-foreground tabular-nums w-7 text-right">
-        {progress}%
-      </span>
     </div>
   )
 }

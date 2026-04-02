@@ -3,7 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// build: 2026-04-02-d
+// v0-build-2026-04-02-e
 const fontSans = Inter({
   subsets: ['latin'],
   variable: '--font-sans',

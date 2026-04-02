@@ -1,5 +1,5 @@
 'use client'
-// FeaturedSlider - clickable card with auto-rotate
+
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -16,6 +16,19 @@ function formatDate(dateString: string): string {
     month: 'long',
     day: 'numeric',
   })
+}
+
+function stripMdx(raw: string): string {
+  return raw
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]+`/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    .replace(/\n+/g, ' ')
+    .trim()
 }
 
 export default function FeaturedSlider({ posts }: Props) {
@@ -67,19 +80,26 @@ export default function FeaturedSlider({ posts }: Props) {
   }
 
   const post = posts[current]
-  // First category from comma-separated string
-  const category = post.categories?.split(',')[0]?.trim() || null
-  // Strip MDX/markdown for excerpt: remove headers, bold, links, code
-  const plainExcerpt = (post.excerpt || '')
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`]+`/g, '')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/#{1,6}\s+/g, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
-    .replace(/\n+/g, ' ')
-    .trim()
+  const category = post.categories?.split(',')[0]?.trim() ?? null
+  const plainExcerpt = stripMdx(post.excerpt ?? '')
+
+  const imgClass = [
+    'object-cover transition-all duration-500 ease-out',
+    isAnimating
+      ? direction === 'next'
+        ? 'opacity-0 scale-[1.04] translate-x-3'
+        : 'opacity-0 scale-[1.04] -translate-x-3'
+      : 'opacity-100 scale-100 translate-x-0',
+  ].join(' ')
+
+  const textClass = [
+    'flex flex-col justify-between p-5 md:p-7 flex-1 min-w-0 transition-all duration-300',
+    isAnimating
+      ? direction === 'next'
+        ? 'opacity-0 translate-x-3'
+        : 'opacity-0 -translate-x-3'
+      : 'opacity-100 translate-x-0',
+  ].join(' ')
 
   return (
     <Link
@@ -88,9 +108,8 @@ export default function FeaturedSlider({ posts }: Props) {
     >
       <div className="flex flex-col md:flex-row">
 
-        {/* Left: 16:9 image */}
+        {/* Image — strict 16:9 */}
         <div className="w-full md:w-[55%] shrink-0">
-          {/* aspect-video = 16:9, position:relative so Image fill works */}
           <div className="relative w-full aspect-video overflow-hidden">
             {post.coverSrc ? (
               <Image
@@ -99,23 +118,16 @@ export default function FeaturedSlider({ posts }: Props) {
                 alt={post.title}
                 fill
                 loading="eager"
-                className={[
-                  'object-cover transition-all duration-500 ease-out',
-                  isAnimating
-                    ? direction === 'next'
-                      ? 'opacity-0 scale-[1.04] translate-x-3'
-                      : 'opacity-0 scale-[1.04] -translate-x-3'
-                    : 'opacity-100 scale-100 translate-x-0',
-                ].join(' ')}
+                className={imgClass}
                 sizes="(max-width: 768px) 100vw, 55vw"
               />
             ) : (
               <div className="absolute inset-0 ai-gradient" />
             )}
 
-            {/* Prev / Next arrows */}
+            {/* Prev arrow */}
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handlePrev(); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handlePrev() }}
               aria-label="Previous slide"
               className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
             >
@@ -123,8 +135,10 @@ export default function FeaturedSlider({ posts }: Props) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
+
+            {/* Next arrow */}
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleNext(); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleNext() }}
               aria-label="Next slide"
               className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
             >
@@ -135,40 +149,25 @@ export default function FeaturedSlider({ posts }: Props) {
           </div>
         </div>
 
-        {/* Right: text content */}
-        <div
-          className={[
-            'flex flex-col justify-between p-5 md:p-7 flex-1 min-w-0 transition-all duration-380',
-            isAnimating
-              ? direction === 'next'
-                ? 'opacity-0 translate-x-3'
-                : 'opacity-0 -translate-x-3'
-              : 'opacity-100 translate-x-0',
-          ].join(' ')}
-        >
+        {/* Text content */}
+        <div className={textClass}>
           <div className="flex-1 flex flex-col">
-            {/* Category */}
             {category && (
               <div className="mb-3">
                 <CategoryBadge category={category} variant="default" />
               </div>
             )}
 
-            {/* Title */}
-            <div className="mb-3">
-              <h2 className="font-serif text-xl md:text-2xl font-semibold text-foreground leading-snug text-balance group-hover:text-primary transition-colors duration-200">
-                {post.title}
-              </h2>
-            </div>
+            <h2 className="font-serif text-xl md:text-2xl font-semibold text-foreground leading-snug text-balance group-hover:text-primary transition-colors duration-200 mb-3">
+              {post.title}
+            </h2>
 
-            {/* Excerpt — plain text (MDX stripped) */}
             {plainExcerpt && (
               <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">
                 {plainExcerpt}
               </p>
             )}
 
-            {/* Author + date */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-auto">
               {post.author && (
                 <>
@@ -183,15 +182,14 @@ export default function FeaturedSlider({ posts }: Props) {
             </div>
           </div>
 
-          {/* Bottom: dots + progress + read link */}
+          {/* Dots + progress + read more */}
           <div className="mt-5 pt-4 border-t border-border/40">
             <div className="flex items-center justify-between gap-4">
-              {/* Dots */}
               <div className="flex items-center gap-1.5">
                 {posts.map((_, i) => (
                   <button
                     key={i}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDot(i); }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDot(i) }}
                     aria-label={`Go to slide ${i + 1}`}
                     className={[
                       'rounded-full transition-all duration-300',
@@ -203,7 +201,6 @@ export default function FeaturedSlider({ posts }: Props) {
                 ))}
               </div>
 
-              {/* Progress bar */}
               <div className="flex-1 h-0.5 rounded-full bg-border overflow-hidden">
                 <div
                   key={`progress-${current}`}
@@ -212,7 +209,6 @@ export default function FeaturedSlider({ posts }: Props) {
                 />
               </div>
 
-              {/* Read more indicator */}
               <span className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
                 Read more
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -222,7 +218,9 @@ export default function FeaturedSlider({ posts }: Props) {
             </div>
           </div>
         </div>
+
       </div>
+
       <style>{`
         @keyframes slider-progress {
           from { width: 0% }

@@ -1,5 +1,5 @@
 'use client'
-
+// FeaturedSlider - clickable card with auto-rotate
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -82,7 +82,10 @@ export default function FeaturedSlider({ posts }: Props) {
     .trim()
 
   return (
-    <div className="w-full rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden group">
+    <Link
+      href={`/blog/${post.slug}`}
+      className="block w-full rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden group cursor-pointer hover:shadow-md transition-shadow duration-300"
+    >
       <div className="flex flex-col md:flex-row">
 
         {/* Left: 16:9 image */}
@@ -112,7 +115,7 @@ export default function FeaturedSlider({ posts }: Props) {
 
             {/* Prev / Next arrows */}
             <button
-              onClick={handlePrev}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handlePrev(); }}
               aria-label="Previous slide"
               className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
             >
@@ -121,7 +124,7 @@ export default function FeaturedSlider({ posts }: Props) {
               </svg>
             </button>
             <button
-              onClick={handleNext}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleNext(); }}
               aria-label="Next slide"
               className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
             >
@@ -152,11 +155,11 @@ export default function FeaturedSlider({ posts }: Props) {
             )}
 
             {/* Title */}
-            <Link href={`/blog/${post.slug}`} className="group/link block mb-3">
-              <h2 className="font-serif text-xl md:text-2xl font-semibold text-foreground leading-snug text-balance group-hover/link:text-primary transition-colors duration-200">
+            <div className="mb-3">
+              <h2 className="font-serif text-xl md:text-2xl font-semibold text-foreground leading-snug text-balance group-hover:text-primary transition-colors duration-200">
                 {post.title}
               </h2>
-            </Link>
+            </div>
 
             {/* Excerpt — plain text (MDX stripped) */}
             {plainExcerpt && (
@@ -188,7 +191,7 @@ export default function FeaturedSlider({ posts }: Props) {
                 {posts.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => handleDot(i)}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDot(i); }}
                     aria-label={`Go to slide ${i + 1}`}
                     className={[
                       'rounded-full transition-all duration-300',
@@ -209,27 +212,23 @@ export default function FeaturedSlider({ posts }: Props) {
                 />
               </div>
 
-              {/* Read more */}
-              <Link
-                href={`/blog/${post.slug}`}
-                className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1 hover:gap-2 transition-all duration-200"
-              >
+              {/* Read more indicator */}
+              <span className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
                 Read more
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </Link>
+              </span>
             </div>
           </div>
         </div>
       </div>
-
       <style>{`
         @keyframes slider-progress {
           from { width: 0% }
           to   { width: 100% }
         }
       `}</style>
-    </div>
+    </Link>
   )
 }

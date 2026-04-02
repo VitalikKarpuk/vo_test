@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { getAllArticles, type MappedPost } from '@/lib/graphql/articles'
 import FeaturedSlider from '@/components/featured-slider'
 import CategoryBadge from '@/components/category-badge'
+import CategoryFilter from '@/components/category-filter'
 
 export const metadata: Metadata = {
   title: 'AI Blog | Latest Articles on Artificial Intelligence',
@@ -20,6 +21,15 @@ function formatDate(dateString: string): string {
 
 export default async function BlogPage() {
   const posts = await getAllArticles()
+
+  // Extract unique categories from all posts (sorted alphabetically)
+  const allCategories = Array.from(
+    new Set(
+      posts
+        .flatMap((p) => (p.categories ? p.categories.split(',').map((c) => c.trim()) : []))
+        .filter(Boolean)
+    )
+  ).sort()
 
   // Split posts: first 5 go to slider, rest to grids
   const sliderPosts = posts.slice(0, 5)
@@ -60,6 +70,12 @@ export default async function BlogPage() {
         <section className="px-4 py-10 animate-fade-up" style={{ animationDelay: '0.1s' }}>
           <div className="mx-auto max-w-7xl">
             <SectionHeading color="primary" label="Latest Articles" />
+
+            {/* Category filter row */}
+            <div className="mb-7">
+              <CategoryFilter categories={allCategories} />
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {latestPosts.map((post, index) => (
                 <PostCard key={post.id} post={post} index={index} />

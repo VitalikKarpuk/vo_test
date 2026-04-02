@@ -85,59 +85,50 @@ export default function FeaturedSlider({ posts }: Props) {
     <div className="w-full rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden group">
       <div className="flex flex-col md:flex-row">
 
-      {/* Left: 16:9 image */}
+        {/* Left: 16:9 image */}
         <div className="w-full md:w-[55%] shrink-0">
           {/* aspect-video = 16:9, position:relative so Image fill works */}
           <div className="relative w-full aspect-video overflow-hidden">
-          {post.coverSrc ? (
-            <Image
-              key={`img-${post.id}`}
-              src={post.coverSrc}
-              alt={post.title}
-              fill
-              loading="eager"
-              className={[
-                'object-cover transition-all duration-500 ease-out',
-                isAnimating
-                  ? direction === 'next'
-                    ? 'opacity-0 scale-[1.04] translate-x-3'
-                    : 'opacity-0 scale-[1.04] -translate-x-3'
-                  : 'opacity-100 scale-100 translate-x-0',
-              ].join(' ')}
-              sizes="(max-width: 768px) 100vw, 55vw"
-            />
-          ) : (
-            <div className="absolute inset-0 ai-gradient" />
-          )}
-
-          {/* Category badge over image */}
-          <div className="absolute top-3 left-3 z-10">
-            {category ? (
-              <CategoryBadge category={category} variant="featured" />
+            {post.coverSrc ? (
+              <Image
+                key={`img-${post.id}`}
+                src={post.coverSrc}
+                alt={post.title}
+                fill
+                loading="eager"
+                className={[
+                  'object-cover transition-all duration-500 ease-out',
+                  isAnimating
+                    ? direction === 'next'
+                      ? 'opacity-0 scale-[1.04] translate-x-3'
+                      : 'opacity-0 scale-[1.04] -translate-x-3'
+                    : 'opacity-100 scale-100 translate-x-0',
+                ].join(' ')}
+                sizes="(max-width: 768px) 100vw, 55vw"
+              />
             ) : (
-              <span className="featured-badge">Featured</span>
+              <div className="absolute inset-0 ai-gradient" />
             )}
-          </div>
 
-          {/* Prev / Next arrows */}
-          <button
-            onClick={handlePrev}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={handleNext}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+            {/* Prev / Next arrows */}
+            <button
+              onClick={handlePrev}
+              aria-label="Previous slide"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={handleNext}
+              aria-label="Next slide"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-border/40 shadow flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 focus-visible:opacity-100"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { getArticleById, getAllArticles, type MappedPost } from '@/lib/graphql/articles'
 import MDXRenderer from '@/components/blog/mdxRenderer'
 import CategoryBadge from '@/components/category-badge'
+import TableOfContents from '@/components/table-of-contents'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -108,7 +109,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       )}
 
       {/* ── Article header: title + meta, below image ── */}
-      <div className="mx-auto max-w-3xl px-5 sm:px-6">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6">
         <header className="pt-10 pb-8 border-b border-border/30 animate-fade-up">
           {/* Category + reading time row */}
           <div className="flex items-center gap-3 mb-5">
@@ -168,48 +169,60 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </header>
 
-        {/* ── Article body ── */}
-        <div
-          className="py-10 prose prose-neutral prose-lg max-w-none animate-fade-up
-            prose-headings:font-serif prose-headings:font-semibold prose-headings:text-foreground
-            prose-p:text-muted-foreground prose-p:leading-relaxed
-            prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-foreground
-            prose-code:text-primary prose-code:bg-primary/8 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
-            prose-pre:bg-secondary prose-pre:border prose-pre:border-border/30 prose-pre:rounded-xl
-            prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-            prose-img:rounded-xl prose-img:shadow-sm"
-          style={{ animationDelay: '0.1s' }}
-        >
-          <MDXRenderer source={content} />
-        </div>
+        {/* ── Two-column: article body + ToC sidebar ── */}
+        <div className="flex gap-12 py-10 items-start">
 
-        {/* ── Tags ── */}
-        {category && (
-          <div className="pb-8 flex flex-wrap gap-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-            {post.categories?.split(',').map((tag) => (
-              <span
-                key={tag.trim()}
-                className="px-3 py-1 text-xs font-medium text-muted-foreground bg-muted rounded-full hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+          {/* Article body */}
+          <div className="min-w-0 flex-1">
+            <div
+              className="article-body prose prose-neutral prose-lg max-w-none animate-fade-up
+                prose-headings:font-serif prose-headings:font-semibold prose-headings:text-foreground
+                prose-p:text-muted-foreground prose-p:leading-relaxed
+                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-foreground
+                prose-code:text-primary prose-code:bg-primary/8 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
+                prose-pre:bg-secondary prose-pre:border prose-pre:border-border/30 prose-pre:rounded-xl
+                prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
+                prose-img:rounded-xl prose-img:shadow-sm"
+              style={{ animationDelay: '0.1s' }}
+            >
+              <MDXRenderer source={content} />
+            </div>
+
+            {/* Tags */}
+            {category && (
+              <div className="pt-8 flex flex-wrap gap-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+                {post.categories?.split(',').map((tag) => (
+                  <span
+                    key={tag.trim()}
+                    className="px-3 py-1 text-xs font-medium text-muted-foreground bg-muted rounded-full hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    #{tag.trim()}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Footer nav */}
+            <footer className="py-8 border-t border-border/30 mt-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+              <Link
+                href="/blog"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
-                #{tag.trim()}
-              </span>
-            ))}
+                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                </svg>
+                Back to all posts
+              </Link>
+            </footer>
           </div>
-        )}
 
-        {/* ── Footer nav ── */}
-        <footer className="py-8 border-t border-border/30 mb-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-          >
-            <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-            </svg>
-            Back to all posts
-          </Link>
-        </footer>
+          {/* ToC sidebar — hidden on mobile, shows from lg */}
+          <div className="hidden lg:block w-60 shrink-0">
+            <TableOfContents contentSelector=".article-body" />
+          </div>
+
+        </div>
       </div>
 
       {/* ── Related posts ── */}

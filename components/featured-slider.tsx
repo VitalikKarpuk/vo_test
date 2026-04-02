@@ -1,5 +1,5 @@
 'use client'
-
+// build: 2026-04-02-d
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -220,13 +220,6 @@ export default function FeaturedSlider({ posts }: Props) {
         </div>
 
       </div>
-
-      <style>{`
-        @keyframes slider-progress {
-          from { width: 0% }
-          to   { width: 100% }
-        }
-      `}</style>
     </Link>
   )
 }

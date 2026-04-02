@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
@@ -17,9 +17,16 @@ const playfair = Playfair_Display({
   weight: ['400', '500', '600', '700'],
 })
 
+export const viewport: Viewport = {
+  themeColor: '#D6448F',
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export const metadata: Metadata = {
   title: 'AI Blog | Latest Articles on Artificial Intelligence',
-  description: 'Your source for the latest insights on artificial intelligence, machine learning, and emerging technologies.',
+  description:
+    'Your source for the latest insights on artificial intelligence, machine learning, and emerging technologies.',
   generator: 'v0.app',
   icons: {
     icon: [

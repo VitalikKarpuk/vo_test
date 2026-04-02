@@ -99,43 +99,6 @@ export default async function BlogPage() {
         </section>
       )}
 
-      {/* Newsletter CTA */}
-      <section className="px-4 py-20 animate-fade-up" style={{ animationDelay: '0.25s' }}>
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="glass-panel rounded-3xl p-10 md:p-16 ai-card">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl ai-gradient flex items-center justify-center animate-float">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"
-                />
-              </svg>
-            </div>
-            <h3 className="font-serif text-2xl md:text-3xl font-semibold text-foreground mb-4 text-balance">
-              Stay Updated with AI Insights
-            </h3>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Get the latest articles on artificial intelligence, machine learning, and tech trends
-              delivered to your inbox.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              />
-              <button className="btn-primary rounded-xl whitespace-nowrap">Subscribe</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </main>
@@ -362,10 +325,7 @@ function Footer() {
               </div>
               <span className="font-serif text-xl font-semibold text-foreground">AI Blog</span>
             </Link>
-            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Your source for the latest insights on artificial intelligence, machine learning, and
-              emerging technologies. Stay informed and inspired.
-            </p>
+
           </div>
 
           <div>

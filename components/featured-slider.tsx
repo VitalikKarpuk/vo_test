@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { MappedPost } from '@/lib/graphql/articles'
+import CategoryBadge from '@/components/category-badge'
 
 interface Props {
   posts: MappedPost[]
@@ -66,20 +67,35 @@ export default function FeaturedSlider({ posts }: Props) {
   }
 
   const post = posts[current]
-  const category = post.categories?.split(',')[0] || 'Article'
+  // First category from comma-separated string
+  const category = post.categories?.split(',')[0]?.trim() || null
+  // Strip MDX/markdown for excerpt: remove headers, bold, links, code
+  const plainExcerpt = (post.excerpt || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]+`/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    .replace(/\n+/g, ' ')
+    .trim()
 
   return (
     <div className="w-full rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden group">
-      <div className="flex flex-col md:flex-row h-auto md:h-[340px]">
+      <div className="flex flex-col md:flex-row">
 
-        {/* Left: 16:9-ish image — fixed height, relative container */}
-        <div className="relative w-full md:w-[55%] shrink-0 h-[220px] md:h-full overflow-hidden">
+      {/* Left: 16:9 image */}
+        <div className="w-full md:w-[55%] shrink-0">
+          {/* aspect-video = 16:9, position:relative so Image fill works */}
+          <div className="relative w-full aspect-video overflow-hidden">
           {post.coverSrc ? (
             <Image
               key={`img-${post.id}`}
               src={post.coverSrc}
               alt={post.title}
               fill
+              loading="eager"
               className={[
                 'object-cover transition-all duration-500 ease-out',
                 isAnimating
@@ -89,7 +105,6 @@ export default function FeaturedSlider({ posts }: Props) {
                   : 'opacity-100 scale-100 translate-x-0',
               ].join(' ')}
               sizes="(max-width: 768px) 100vw, 55vw"
-              priority
             />
           ) : (
             <div className="absolute inset-0 ai-gradient" />
@@ -97,7 +112,11 @@ export default function FeaturedSlider({ posts }: Props) {
 
           {/* Category badge over image */}
           <div className="absolute top-3 left-3 z-10">
-            <span className="featured-badge">Featured</span>
+            {category ? (
+              <CategoryBadge category={category} variant="featured" />
+            ) : (
+              <span className="featured-badge">Featured</span>
+            )}
           </div>
 
           {/* Prev / Next arrows */}
@@ -119,6 +138,7 @@ export default function FeaturedSlider({ posts }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
+          </div>
         </div>
 
         {/* Right: text content */}
@@ -134,9 +154,11 @@ export default function FeaturedSlider({ posts }: Props) {
         >
           <div className="flex-1 flex flex-col">
             {/* Category */}
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">
-              {category}
-            </span>
+            {category && (
+              <div className="mb-3">
+                <CategoryBadge category={category} variant="default" />
+              </div>
+            )}
 
             {/* Title */}
             <Link href={`/blog/${post.slug}`} className="group/link block mb-3">
@@ -145,10 +167,10 @@ export default function FeaturedSlider({ posts }: Props) {
               </h2>
             </Link>
 
-            {/* Excerpt */}
-            {post.excerpt && (
+            {/* Excerpt — plain text (MDX stripped) */}
+            {plainExcerpt && (
               <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">
-                {post.excerpt}
+                {plainExcerpt}
               </p>
             )}
 

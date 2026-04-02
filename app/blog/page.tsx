@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getAllArticles, type MappedPost } from '@/lib/graphql/articles'
 import FeaturedSlider from '@/components/featured-slider'
+import CategoryBadge from '@/components/category-badge'
 
 export const metadata: Metadata = {
   title: 'AI Blog | Latest Articles on Artificial Intelligence',
@@ -183,7 +184,7 @@ function PostCard({
 
           {/* Category badge — no dark overlay */}
           <div className="absolute top-3 left-3">
-            <span className="category-badge">{category}</span>
+            <CategoryBadge category={category} variant="default" />
           </div>
         </div>
 

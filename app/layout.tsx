@@ -1,19 +1,54 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// v0-build-2026-04-02-e
-const fontSans = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
+// Area font - используется как sans-serif
+const fontArea = localFont({
+  src: [
+    {
+      path: '../public/fonts/Area-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-area',
   display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
 })
 
-const fontSerif = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
+// Whyte font - используется как serif/display
+const fontWhyte = localFont({
+  src: [
+    {
+      path: '../public/fonts/Whyte-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-whyte',
   display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
 })
 
 export const viewport: Viewport = {
@@ -35,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${fontSans.variable} ${fontSerif.variable} scroll-smooth`}>
+    <html lang="en" className={`${fontArea.variable} ${fontWhyte.variable} scroll-smooth`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />

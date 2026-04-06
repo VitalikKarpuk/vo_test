@@ -1,19 +1,84 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// v0-build-2026-04-02-e
-const fontSans = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
+// Area font - основной шрифт
+const fontArea = localFont({
+  src: [
+    {
+      path: '../public/fonts/Area-Extralight.otf',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Light.otf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Semibold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Extrabold.otf',
+      weight: '800',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Black.otf',
+      weight: '900',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-area',
   display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
 })
 
-const fontSerif = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
+// Whyte font - дополнительный шрифт
+const fontWhyte = localFont({
+  src: [
+    {
+      path: '../public/fonts/Whyte-Light_1.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Regular_1.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Medium_1.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Bold_1.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-whyte',
   display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
 })
 
 export const viewport: Viewport = {
@@ -35,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${fontSans.variable} ${fontSerif.variable} scroll-smooth`}>
+    <html lang="en" className={`${fontArea.variable} ${fontWhyte.variable} scroll-smooth`} data-scroll-behavior="smooth">
       <body className="font-sans antialiased">
         {children}
         <Analytics />

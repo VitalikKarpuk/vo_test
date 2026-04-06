@@ -100,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${fontArea.variable} ${fontWhyte.variable} scroll-smooth`}>
+    <html lang="en" className={`${fontArea.variable} ${fontWhyte.variable} scroll-smooth`} data-scroll-behavior="smooth">
       <body className="font-sans antialiased">
         {children}
         <Analytics />

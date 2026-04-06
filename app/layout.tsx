@@ -3,22 +3,47 @@ import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// Area font - используется как sans-serif
+// Area font - основной шрифт
 const fontArea = localFont({
   src: [
     {
-      path: '../public/fonts/Area-Regular.woff2',
+      path: '../public/fonts/Area-Extralight.otf',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Light.otf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Regular.otf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Area-Medium.woff2',
+      path: '../public/fonts/Area-Medium.otf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Area-Bold.woff2',
+      path: '../public/fonts/Area-Semibold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Bold.otf',
       weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Extrabold.otf',
+      weight: '800',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Area-Black.otf',
+      weight: '900',
       style: 'normal',
     },
   ],
@@ -27,21 +52,26 @@ const fontArea = localFont({
   fallback: ['system-ui', 'sans-serif'],
 })
 
-// Whyte font - используется как serif/display
+// Whyte font - дополнительный шрифт
 const fontWhyte = localFont({
   src: [
     {
-      path: '../public/fonts/Whyte-Regular.woff2',
+      path: '../public/fonts/Whyte-Light_1.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Whyte-Regular_1.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Whyte-Medium.woff2',
+      path: '../public/fonts/Whyte-Medium_1.ttf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Whyte-Bold.woff2',
+      path: '../public/fonts/Whyte-Bold_1.ttf',
       weight: '700',
       style: 'normal',
     },

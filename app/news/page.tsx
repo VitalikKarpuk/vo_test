@@ -1,4 +1,5 @@
-import { getAllArticles, PostCard } from '@/features/blog'
+import { getAllArticles } from '@/features/blog'
+import PostCard from '@/features/blog/components/PostCard'
 
 export const metadata = {
   title: 'News',

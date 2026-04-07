@@ -102,39 +102,39 @@ export default async function NewsDetailPage({ params }: PageProps) {
       </div>
 
       {/* Article Content */}
-      <div className="bg-[hsl(240,5%,12%)]">
+      <div className="bg-card">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-12">
           {/* Share buttons */}
-          <div className="mb-8 pb-8 border-b border-white/10">
+          <div className="mb-8 pb-8 border-b border-border">
             <ShareButtons title={article.title} slug={slug} />
           </div>
 
           {/* MDX Content */}
-          <article className="prose prose-lg prose-invert max-w-none 
-            prose-headings:text-white prose-headings:font-serif
-            prose-p:text-white/90 prose-p:leading-relaxed
-            prose-a:text-[hsl(226,100%,67%)] prose-a:underline prose-a:underline-offset-2 prose-a:decoration-[hsl(226,100%,67%)]/60 hover:prose-a:text-white
-            prose-strong:text-white
-            prose-ul:text-white/90 prose-ol:text-white/90
-            prose-li:marker:text-white/50
-            prose-blockquote:border-[hsl(329,64%,55%)]/50 prose-blockquote:text-white/80
-            prose-code:text-white/90 prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-            prose-pre:bg-black/30 prose-pre:border prose-pre:border-white/10
+          <article className="prose prose-lg max-w-none 
+            prose-headings:text-foreground prose-headings:font-serif
+            prose-p:text-foreground prose-p:leading-relaxed
+            prose-a:text-[hsl(226,100%,67%)] prose-a:underline prose-a:underline-offset-2 prose-a:decoration-[hsl(226,100%,67%)]/60 hover:prose-a:text-foreground
+            prose-strong:text-foreground
+            prose-ul:text-foreground prose-ol:text-foreground
+            prose-li:marker:text-muted-foreground
+            prose-blockquote:border-[hsl(329,64%,55%)]/50 prose-blockquote:text-muted-foreground
+            prose-code:text-foreground prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+            prose-pre:bg-muted prose-pre:border prose-pre:border-border
           ">
             <MDXRenderer content={article.content} />
           </article>
 
           {/* Related Links */}
           {article.socialLinks && Object.values(article.socialLinks).some(Boolean) && (
-            <div className="mt-12 pt-8 border-t border-white/10">
-              <h3 className="text-white font-semibold mb-4 font-serif">Related Links</h3>
+            <div className="mt-12 pt-8 border-t border-border">
+              <h3 className="text-foreground font-semibold mb-4 font-serif">Related Links</h3>
               <div className="flex flex-wrap gap-3">
                 {article.socialLinks.twitter && (
                   <a
                     href={article.socialLinks.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-4 py-2 rounded-lg transition-colors"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -147,7 +147,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.reddit}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-4 py-2 rounded-lg transition-colors"
                   >
                     Reddit
                   </a>
@@ -157,7 +157,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.mirror}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-4 py-2 rounded-lg transition-colors"
                   >
                     Mirror
                   </a>
@@ -167,7 +167,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.custom}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-4 py-2 rounded-lg transition-colors"
                   >
                     Learn More
                   </a>

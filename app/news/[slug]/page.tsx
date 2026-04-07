@@ -41,7 +41,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
   const category = article.categories?.split(',')[0]?.trim() || 'News'
 
   return (
-    <main className="min-h-screen bg-[#231343]">
+    <main className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="relative">
         {/* Back button */}
@@ -57,8 +57,8 @@ export default async function NewsDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        {/* Hero Image */}
-        <div className="relative h-[50vh] min-h-[400px] max-h-[600px]">
+        {/* Hero Image - 16:9 aspect ratio */}
+        <div className="relative aspect-video max-h-[600px]">
           {article.coverSrc ? (
             <Image
               src={article.coverSrc}
@@ -68,15 +68,15 @@ export default async function NewsDetailPage({ params }: PageProps) {
               priority
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#564578] to-[#231343]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(329,64%,55%)] to-[hsl(240,5%,12%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#231343] via-[#231343]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(240,5%,12%)] via-[hsl(240,5%,12%)]/50 to-transparent" />
         </div>
 
         {/* Hero Content */}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <span className="inline-block bg-[#564578] text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-md mb-4">
+            <span className="inline-block bg-[hsl(329,64%,55%)] text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-md mb-4">
               {category}
             </span>
             <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight font-serif mb-4">
@@ -102,7 +102,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
       </div>
 
       {/* Article Content */}
-      <div className="bg-[#564578]">
+      <div className="bg-[hsl(240,5%,12%)]">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-12">
           {/* Share buttons */}
           <div className="mb-8 pb-8 border-b border-white/10">
@@ -113,13 +113,13 @@ export default async function NewsDetailPage({ params }: PageProps) {
           <article className="prose prose-lg prose-invert max-w-none 
             prose-headings:text-white prose-headings:font-serif
             prose-p:text-white/90 prose-p:leading-relaxed
-            prose-a:text-white prose-a:underline prose-a:underline-offset-2 prose-a:decoration-white/60 hover:prose-a:decoration-white
+            prose-a:text-[hsl(226,100%,67%)] prose-a:underline prose-a:underline-offset-2 prose-a:decoration-[hsl(226,100%,67%)]/60 hover:prose-a:text-white
             prose-strong:text-white
             prose-ul:text-white/90 prose-ol:text-white/90
             prose-li:marker:text-white/50
-            prose-blockquote:border-white/30 prose-blockquote:text-white/80
+            prose-blockquote:border-[hsl(329,64%,55%)]/50 prose-blockquote:text-white/80
             prose-code:text-white/90 prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-            prose-pre:bg-[#231343] prose-pre:border prose-pre:border-white/10
+            prose-pre:bg-black/30 prose-pre:border prose-pre:border-white/10
           ">
             <MDXRenderer content={article.content} />
           </article>
@@ -134,7 +134,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -147,7 +147,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.reddit}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     Reddit
                   </a>
@@ -157,7 +157,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.mirror}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     Mirror
                   </a>
@@ -167,7 +167,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                     href={article.socialLinks.custom}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-[hsl(329,64%,55%)]/20 hover:bg-[hsl(329,64%,55%)]/40 text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     Learn More
                   </a>
@@ -179,11 +179,11 @@ export default async function NewsDetailPage({ params }: PageProps) {
       </div>
 
       {/* Back to News */}
-      <div className="bg-[#231343] py-12">
+      <div className="bg-background py-12">
         <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />

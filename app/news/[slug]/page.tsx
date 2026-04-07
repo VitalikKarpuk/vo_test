@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getAllArticles, getArticleById } from '@/features/blog'
-import { MDXRenderer } from '@/features/blog/components/MDXRenderer'
-import { ShareButtons } from '@/features/blog/components/ShareButtons'
+import MDXRenderer from '@/features/blog/components/MDXRenderer'
+import ShareButtons from '@/features/blog/components/ShareButtons'
 
 interface PageProps {
   params: Promise<{ slug: string }>

@@ -25,10 +25,13 @@ export default function PostCard({
 }: PostCardProps) {
   const category = article.categories?.split(',')[0]?.trim() || 'Article'
   
-  const formattedDate = new Date(article.date).toLocaleDateString('en-US', {
+  // Use UTC to avoid hydration mismatch between server and client timezones
+  const dateObj = new Date(article.date)
+  const formattedDate = dateObj.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   })
 
   // Horizontal variant for featured sections

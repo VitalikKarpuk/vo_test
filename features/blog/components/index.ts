@@ -1,5 +1,6 @@
 export { default as BlogListPage } from './BlogListPage'
 export { default as BlogPostPage } from './BlogPostPage'
+export { default as PostCard } from './PostCard'
 export { default as FeaturedSlider } from './FeaturedSlider'
 export { default as CategoryBadge } from './CategoryBadge'
 export { default as CategoryFilter } from './CategoryFilter'

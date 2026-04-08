@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BlogListPage, getAllArticles } from '@/features/blog'
+import { BentoBlogPage, getAllArticles } from '@/features/blog'
 
 export const metadata: Metadata = {
   title: 'AI Blog | Latest Articles on Artificial Intelligence',
@@ -10,7 +10,7 @@ export default async function BlogPage() {
   const posts = await getAllArticles()
 
   return (
-    <BlogListPage 
+    <BentoBlogPage 
       posts={posts}
       basePath="/blog"
       blogName="AI Blog"

@@ -4,6 +4,7 @@ import type { MappedPost } from '../types'
 import FeaturedSlider from './FeaturedSlider'
 import CategoryBadge from './CategoryBadge'
 import CategoryFilter from './CategoryFilter'
+import HeaderDropdown from '@/components/header-dropdown'
 import { formatDate, stripMdx } from '../utils'
 
 interface BlogListPageProps {
@@ -198,26 +199,31 @@ function Header({ basePath, blogName }: { basePath: string; blogName: string }) 
   return (
     <header className="sticky top-0 z-50 glass-card border-b border-border/30">
       <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <Link href={basePath} className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center group-hover:animate-pulse-glow transition-all">
-            <svg
-              className="w-4 h-4 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
-              />
-            </svg>
-          </div>
-          <span className="font-serif text-xl font-semibold tracking-tight text-foreground">
-            {blogName}
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href={basePath} className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center group-hover:animate-pulse-glow transition-all">
+              <svg
+                className="w-4 h-4 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+                />
+              </svg>
+            </div>
+            <span className="font-serif text-xl font-semibold tracking-tight text-foreground">
+              {blogName}
+            </span>
+          </Link>
+          
+          {/* Dropdown menu icon */}
+          <HeaderDropdown />
+        </div>
 
         <nav className="hidden md:flex items-center gap-8">
           {['Articles', 'Tutorials', 'News', 'Research'].map((item) => (

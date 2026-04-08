@@ -4,6 +4,7 @@
 // Components
 export { default as BlogListPage } from './components/BlogListPage'
 export { default as BlogPostPage } from './components/BlogPostPage'
+export { default as PostCard } from './components/PostCard'
 export { default as FeaturedSlider } from './components/FeaturedSlider'
 export { default as CategoryBadge } from './components/CategoryBadge'
 export { default as CategoryFilter } from './components/CategoryFilter'

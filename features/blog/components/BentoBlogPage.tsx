@@ -260,27 +260,27 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
   const wordCount = (post.excerpt || '').split(/\s+/).length
   const readTime = Math.max(1, Math.ceil(wordCount / 40))
 
-  // NEOBRUTALIST VARIANTS
+  // NEOBRUTALIST + IMMERSIVE VARIANTS
   const variants = {
     hero: {
-      wrapper: 'group relative neo-card-primary overflow-hidden bg-card',
-      imageWrapper: 'neo-image-frame',
-      imageAspect: 'absolute inset-0',
+      wrapper: 'group relative neo-card-primary neo-ripple neo-3d-card overflow-hidden bg-card',
+      imageWrapper: 'neo-image-parallax h-full',
+      imageAspect: '', // handled by isFullCover logic
       showOverlay: true,
       overlayClass: 'bg-gradient-to-t from-[hsl(var(--secondary-hsl))] via-[hsl(var(--secondary-hsl)/0.4)] to-transparent',
       contentPosition: 'absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10',
-      titleClass: 'neo-heading font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-none mb-4',
+      titleClass: 'neo-heading neo-glitch font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-none mb-4',
       excerptClass: 'text-white/90 text-base md:text-lg line-clamp-2 mb-5 max-w-xl',
       showExcerpt: true,
       showMeta: true,
       showReadMore: true,
       metaClass: 'text-white/70',
-      badgeClass: 'neo-badge',
+      badgeClass: 'neo-badge neo-magnetic',
     },
     medium: {
-      wrapper: 'group relative neo-card overflow-hidden bg-card',
-      imageWrapper: 'neo-image-frame',
-      imageAspect: 'absolute inset-0',
+      wrapper: 'group relative neo-card neo-ripple neo-gradient-border overflow-hidden bg-card',
+      imageWrapper: 'neo-image-parallax h-full',
+      imageAspect: '', // handled by isFullCover logic
       showOverlay: true,
       overlayClass: 'bg-gradient-to-t from-[hsl(var(--secondary-hsl))] via-[hsl(var(--secondary-hsl)/0.3)] to-transparent',
       contentPosition: 'absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10',
@@ -293,8 +293,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       badgeClass: 'neo-badge',
     },
     standard: {
-      wrapper: 'group neo-card neo-stack overflow-hidden bg-card flex flex-col',
-      imageWrapper: '',
+      wrapper: 'group neo-card neo-stack neo-ripple overflow-hidden bg-card flex flex-col',
+      imageWrapper: 'neo-image-parallax',
       imageAspect: 'aspect-video',
       showOverlay: false,
       overlayClass: '',
@@ -308,8 +308,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       badgeClass: 'neo-badge-outline',
     },
     wide: {
-      wrapper: 'group neo-card overflow-hidden bg-card flex flex-col md:flex-row min-h-[220px]',
-      imageWrapper: '',
+      wrapper: 'group neo-card neo-float overflow-hidden bg-card flex flex-col md:flex-row min-h-[220px]',
+      imageWrapper: 'neo-image-parallax',
       imageAspect: 'aspect-video md:aspect-auto md:w-1/2 relative',
       showOverlay: false,
       overlayClass: '',
@@ -323,8 +323,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       badgeClass: 'neo-badge-outline',
     },
     compact: {
-      wrapper: 'group neo-card neo-tilt overflow-hidden bg-card flex flex-col',
-      imageWrapper: '',
+      wrapper: 'group neo-card neo-tilt neo-shake overflow-hidden bg-card flex flex-col',
+      imageWrapper: 'neo-image-parallax',
       imageAspect: 'aspect-[4/3]',
       showOverlay: false,
       overlayClass: '',
@@ -338,8 +338,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       badgeClass: 'neo-badge-outline',
     },
     minimal: {
-      wrapper: 'group neo-card overflow-hidden bg-card flex flex-col',
-      imageWrapper: '',
+      wrapper: 'group neo-card neo-ripple overflow-hidden bg-card flex flex-col',
+      imageWrapper: 'neo-image-parallax',
       imageAspect: 'aspect-video',
       showOverlay: false,
       overlayClass: '',
@@ -356,6 +356,9 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
 
   const v = variants[variant]
 
+  // For hero/medium variants, we need the image wrapper to have explicit dimensions
+  const isFullCover = variant === 'hero' || variant === 'medium'
+
   return (
     <Link 
       href={`${basePath}/${post.slug}`}
@@ -363,8 +366,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       style={{ animationDelay: `${0.05 + index * 0.06}s` }}
       aria-label={`Read article: ${post.title}`}
     >
-      {/* Image */}
-      <div className={`relative ${v.imageAspect} overflow-hidden ${v.imageWrapper}`}>
+      {/* Image - for hero/medium we use h-full, for others use aspect ratio */}
+      <div className={`relative overflow-hidden ${v.imageWrapper} ${isFullCover ? 'absolute inset-0' : v.imageAspect}`}>
         {post.coverSrc ? (
           <Image
             src={post.coverSrc}

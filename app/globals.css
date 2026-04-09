@@ -695,3 +695,229 @@
   padding: 0.25rem 0.6rem;
   border-radius: 9999px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   IMMERSIVE MICROANIMATIONS & 3D EFFECTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* 3D Card Tilt Effect */
+.neo-3d-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.neo-3d-card:hover {
+  transform: rotateX(-2deg) rotateY(2deg) translateZ(10px);
+}
+
+/* Magnetic hover effect */
+@keyframes magnetic-pulse {
+  0%, 100% {
+    box-shadow: 6px 6px 0 hsl(var(--secondary-hsl));
+  }
+  50% {
+    box-shadow: 8px 8px 0 hsl(var(--primary)), 4px 4px 0 hsl(var(--secondary-hsl));
+  }
+}
+
+.neo-magnetic:hover {
+  animation: magnetic-pulse 0.8s ease-in-out infinite;
+}
+
+/* Scroll-triggered reveal */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.neo-reveal {
+  animation: reveal-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Staggered reveal for lists */
+.neo-reveal-1 { animation-delay: 0.1s; }
+.neo-reveal-2 { animation-delay: 0.2s; }
+.neo-reveal-3 { animation-delay: 0.3s; }
+.neo-reveal-4 { animation-delay: 0.4s; }
+.neo-reveal-5 { animation-delay: 0.5s; }
+.neo-reveal-6 { animation-delay: 0.6s; }
+
+/* Glitch effect for headings */
+@keyframes glitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  92% {
+    transform: translate(-2px, 1px);
+    text-shadow: 2px 0 hsl(var(--primary)), -2px 0 hsl(var(--link));
+  }
+  94% {
+    transform: translate(2px, -1px);
+    text-shadow: -2px 0 hsl(var(--primary)), 2px 0 hsl(var(--link));
+  }
+  96% {
+    transform: translate(-1px, 2px);
+    text-shadow: 1px 0 hsl(var(--primary)), -1px 0 hsl(var(--link));
+  }
+  98% {
+    transform: translate(1px, -2px);
+    text-shadow: -1px 0 hsl(var(--primary)), 1px 0 hsl(var(--link));
+  }
+}
+
+.neo-glitch:hover {
+  animation: glitch 0.5s ease-in-out;
+}
+
+/* Parallax container */
+.neo-parallax {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.neo-parallax-layer {
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+}
+
+/* Image zoom with parallax */
+.neo-image-parallax {
+  overflow: hidden;
+}
+
+.neo-image-parallax img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.neo-image-parallax:hover img {
+  transform: scale(1.08) translateY(-2%);
+}
+
+/* Gradient border animation */
+@keyframes gradient-border {
+  0%, 100% {
+    border-color: hsl(var(--primary));
+  }
+  50% {
+    border-color: hsl(var(--link));
+  }
+}
+
+.neo-gradient-border:hover {
+  animation: gradient-border 2s ease infinite;
+}
+
+/* Ripple effect on click */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.neo-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.neo-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+}
+
+.neo-ripple:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+/* Bold line animation */
+@keyframes line-expand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.neo-line-animate::after {
+  content: '';
+  display: block;
+  height: 4px;
+  background: hsl(var(--primary));
+  animation: line-expand 0.8s ease-out forwards;
+}
+
+/* Float effect for cards */
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.neo-float:hover {
+  animation: gentle-float 2s ease-in-out infinite;
+}
+
+/* Shake effect for attention */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.neo-shake:hover {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Typewriter effect utility */
+@keyframes typewriter-cursor {
+  0%, 100% { border-right-color: transparent; }
+  50% { border-right-color: hsl(var(--foreground)); }
+}
+
+.neo-typewriter {
+  border-right: 3px solid hsl(var(--foreground));
+  animation: typewriter-cursor 1s step-end infinite;
+}
+
+/* Scroll indicator */
+@keyframes scroll-indicator {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.neo-scroll-indicator {
+  animation: scroll-indicator 2s ease-in-out infinite;
+}

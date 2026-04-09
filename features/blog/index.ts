@@ -4,6 +4,7 @@
 // Components
 export { default as BlogListPage } from './components/BlogListPage'
 export { default as BentoBlogPage } from './components/BentoBlogPage'
+export { default as MinervaBlogPage } from './components/MinervaBlogPage'
 export { default as BlogPostPage } from './components/BlogPostPage'
 export { default as PostCard } from './components/PostCard'
 export { default as FeaturedSlider } from './components/FeaturedSlider'

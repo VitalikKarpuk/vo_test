@@ -921,3 +921,321 @@
 .neo-scroll-indicator {
   animation: scroll-indicator 2s ease-in-out infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MINERVA-INSPIRED PREMIUM DARK THEME
+   Glassmorphism + Gradient Accents + Immersive Experience
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Dark premium background */
+.minerva-bg {
+  background: linear-gradient(180deg, #0a0d14 0%, #0f1419 50%, #0a0d14 100%);
+  position: relative;
+}
+
+.minerva-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% 0%, hsl(var(--primary) / 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, hsl(var(--link) / 0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Glassmorphism card for dark theme */
+.minerva-card {
+  background: rgba(15, 20, 25, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.minerva-card:hover {
+  background: rgba(15, 20, 25, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px hsl(var(--primary) / 0.1);
+}
+
+/* Featured hero card */
+.minerva-hero-card {
+  background: rgba(15, 20, 25, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.minerva-hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--link) / 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.minerva-hero-card:hover::before {
+  opacity: 1;
+}
+
+/* Gradient text */
+.minerva-gradient-text {
+  background: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 50%, hsl(var(--primary)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient badge */
+.minerva-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--link)) 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+  transition: all 0.3s ease;
+}
+
+.minerva-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px hsl(var(--primary) / 0.4);
+}
+
+/* Outline badge */
+.minerva-badge-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.minerva-badge-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Gradient CTA button */
+.minerva-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--link)) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 0.875rem 1.75rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 16px hsl(var(--primary) / 0.3);
+}
+
+.minerva-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 32px hsl(var(--primary) / 0.4);
+}
+
+/* Section header with gradient line */
+.minerva-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.minerva-section-header h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.minerva-section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+}
+
+/* Glow dot indicator */
+.minerva-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--link)) 100%);
+  box-shadow: 0 0 12px hsl(var(--primary) / 0.6);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Counter animation for stats */
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.minerva-stat {
+  animation: count-up 0.6s ease-out backwards;
+}
+
+/* Image overlay gradient */
+.minerva-image-overlay {
+  position: relative;
+}
+
+.minerva-image-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 13, 20, 0.95) 0%,
+    rgba(10, 13, 20, 0.6) 40%,
+    rgba(10, 13, 20, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+/* Hover lift effect */
+.minerva-lift {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.minerva-lift:hover {
+  transform: translateY(-12px);
+}
+
+/* Subtle glow on hover */
+.minerva-glow:hover {
+  box-shadow: 
+    0 0 40px hsl(var(--primary) / 0.15),
+    0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Title underline animation */
+.minerva-title-underline {
+  position: relative;
+  display: inline;
+}
+
+.minerva-title-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--link)) 100%);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .minerva-title-underline::after {
+  width: 100%;
+}
+
+/* Read more arrow animation */
+@keyframes arrow-slide {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+.minerva-arrow {
+  transition: transform 0.3s ease;
+}
+
+.group:hover .minerva-arrow {
+  animation: arrow-slide 0.8s ease infinite;
+}
+
+/* Stats grid item */
+.minerva-stat-item {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.minerva-stat-item .number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00d4ff 0%, hsl(var(--primary)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.minerva-stat-item .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5rem;
+}
+
+/* Scroll indicator */
+.minerva-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.minerva-scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+  animation: scroll-indicator 2s ease-in-out infinite;
+}
+
+/* Logo bar grayscale effect */
+.minerva-logo-item {
+  filter: grayscale(100%) brightness(0.7);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.minerva-logo-item:hover {
+  filter: grayscale(0%) brightness(1);
+  opacity: 1;
+}

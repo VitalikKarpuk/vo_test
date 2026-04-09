@@ -450,3 +450,248 @@
   padding: 0.25rem 0.625rem;
   border-radius: 4px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   NEOBRUTALISM STYLES
+   Minimalism + Boldness with Immersive Microanimations and Empathetic UX
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Neobrutalist Card - Hard shadows, bold borders */
+.neo-card {
+  background: var(--card);
+  border: 3px solid hsl(var(--secondary-hsl));
+  border-radius: 0;
+  box-shadow: 6px 6px 0 hsl(var(--secondary-hsl));
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.neo-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 hsl(var(--secondary-hsl));
+}
+
+.neo-card:active {
+  transform: translate(0, 0);
+  box-shadow: 3px 3px 0 hsl(var(--secondary-hsl));
+}
+
+/* Neobrutalist Card with Primary accent */
+.neo-card-primary {
+  background: var(--card);
+  border: 3px solid hsl(var(--primary));
+  border-radius: 0;
+  box-shadow: 6px 6px 0 hsl(var(--primary));
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.neo-card-primary:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 hsl(var(--primary));
+}
+
+/* Neobrutalist Badge */
+.neo-badge {
+  display: inline-block;
+  background: hsl(var(--primary));
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.75rem;
+  border: 2px solid hsl(var(--secondary-hsl));
+  box-shadow: 3px 3px 0 hsl(var(--secondary-hsl));
+  transition: all 0.15s ease;
+}
+
+.neo-badge:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 hsl(var(--secondary-hsl));
+}
+
+.neo-badge-outline {
+  display: inline-block;
+  background: transparent;
+  color: hsl(var(--secondary-hsl));
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.75rem;
+  border: 2px solid hsl(var(--secondary-hsl));
+  transition: all 0.15s ease;
+}
+
+.neo-badge-outline:hover {
+  background: hsl(var(--secondary-hsl));
+  color: white;
+}
+
+/* Neobrutalist Button */
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: hsl(var(--primary));
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border: 3px solid hsl(var(--secondary-hsl));
+  box-shadow: 4px 4px 0 hsl(var(--secondary-hsl));
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.neo-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 hsl(var(--secondary-hsl));
+}
+
+.neo-btn:active {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0 hsl(var(--secondary-hsl));
+}
+
+/* Immersive Hover Title Animation */
+.neo-title {
+  position: relative;
+  display: inline;
+  transition: all 0.3s ease;
+}
+
+.neo-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: hsl(var(--primary));
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .neo-title::after {
+  width: 100%;
+}
+
+/* Micro-interaction: Bounce arrow */
+@keyframes bounce-right {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+.neo-arrow {
+  transition: transform 0.2s ease;
+}
+
+.group:hover .neo-arrow {
+  animation: bounce-right 0.6s ease infinite;
+}
+
+/* Empathetic Focus States for Accessibility */
+.neo-focus:focus-visible {
+  outline: 4px solid hsl(var(--link));
+  outline-offset: 4px;
+}
+
+/* Bold section divider */
+.neo-divider {
+  height: 4px;
+  background: hsl(var(--secondary-hsl));
+  margin: 2rem 0;
+}
+
+/* Striped pattern background */
+.neo-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    hsl(var(--primary) / 0.05) 8px,
+    hsl(var(--primary) / 0.05) 16px
+  );
+}
+
+/* Marquee-like reading indicator */
+.neo-progress-bar {
+  height: 6px;
+  background: hsl(var(--primary));
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
+
+/* Bold Typography Utilities */
+.neo-heading {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.neo-subheading {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Checkerboard pattern for empty states */
+.neo-checker {
+  background-image:
+    linear-gradient(45deg, hsl(var(--muted)) 25%, transparent 25%),
+    linear-gradient(-45deg, hsl(var(--muted)) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, hsl(var(--muted)) 75%),
+    linear-gradient(-45deg, transparent 75%, hsl(var(--muted)) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Neobrutalist Image Frame */
+.neo-image-frame {
+  position: relative;
+  border: 3px solid hsl(var(--secondary-hsl));
+  overflow: hidden;
+}
+
+.neo-image-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, hsl(var(--secondary-hsl) / 0.8));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Stacked cards effect */
+.neo-stack {
+  position: relative;
+}
+
+.neo-stack::before {
+  content: '';
+  position: absolute;
+  inset: 8px -8px -8px 8px;
+  background: hsl(var(--primary) / 0.3);
+  border: 2px solid hsl(var(--secondary-hsl) / 0.3);
+  z-index: -1;
+}
+
+/* Rotate on hover */
+.neo-tilt:hover {
+  transform: rotate(-1deg) scale(1.02);
+}
+
+/* Reading time pill */
+.neo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: hsl(var(--secondary-hsl));
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}

@@ -46,17 +46,17 @@ export default function BentoBlogPage({
       {showHeader && <Header basePath={basePath} blogName={blogName} />}
 
       {/* Hero Bento Section */}
-      <section className="px-4 pt-8 pb-6">
+      <section className="px-4 pt-10 pb-8">
         <div className="mx-auto max-w-7xl">
-          {/* Section Label */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
+          {/* Section Label - Neobrutalist */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-3">
+              <span className="w-4 h-4 bg-primary border-2 border-foreground" />
+              <h2 className="neo-subheading text-lg text-foreground">
                 Featured
               </h2>
             </div>
-            <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
+            <div className="flex-1 h-1 bg-foreground" />
           </div>
 
           {/* Hero Bento Grid - 2 rows */}
@@ -91,16 +91,16 @@ export default function BentoBlogPage({
 
       {/* Mid Section - 4 cards in a row */}
       {midPosts.length > 0 && (
-        <section className="px-4 py-6">
+        <section className="px-4 py-8">
           <div className="mx-auto max-w-7xl">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[hsl(var(--link))] animate-pulse-glow" />
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--link))]">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <span className="w-4 h-4 bg-[hsl(var(--link))] border-2 border-foreground" />
+                <h2 className="neo-subheading text-lg text-foreground">
                   Latest Articles
                 </h2>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-[hsl(var(--link))]/30 to-transparent" />
+              <div className="flex-1 h-1 bg-foreground" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -120,16 +120,16 @@ export default function BentoBlogPage({
 
       {/* Bottom Bento Grid - Mixed sizes */}
       {bottomPosts.length > 0 && (
-        <section className="px-4 py-6 bg-muted/30">
+        <section className="px-4 py-10 neo-stripes">
           <div className="mx-auto max-w-7xl">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <span className="w-4 h-4 bg-primary border-2 border-foreground" />
+                <h2 className="neo-subheading text-lg text-foreground">
                   More to Explore
                 </h2>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
+              <div className="flex-1 h-1 bg-foreground" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
@@ -210,14 +210,14 @@ export default function BentoBlogPage({
       {morePosts.length > 0 && (
         <section className="px-4 py-10">
           <div className="mx-auto max-w-7xl">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-muted-foreground" />
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <span className="w-4 h-4 bg-muted-foreground border-2 border-foreground" />
+                <h2 className="neo-subheading text-lg text-foreground">
                   Archive
                 </h2>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-muted-foreground/30 to-transparent" />
+              <div className="flex-1 h-1 bg-foreground/30" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -255,85 +255,102 @@ interface BentoCardProps {
 function BentoCard({ post, basePath, variant, className = '', index = 0 }: BentoCardProps) {
   const category = post.categories?.split(',')[0]?.trim() || null
   const plainExcerpt = stripMdx(post.excerpt || '')
+  
+  // Estimate reading time (rough: 200 words per minute)
+  const wordCount = (post.excerpt || '').split(/\s+/).length
+  const readTime = Math.max(1, Math.ceil(wordCount / 40))
 
+  // NEOBRUTALIST VARIANTS
   const variants = {
     hero: {
-      wrapper: 'group relative rounded-3xl overflow-hidden bg-card',
+      wrapper: 'group relative neo-card-primary overflow-hidden bg-card',
+      imageWrapper: 'neo-image-frame',
       imageAspect: 'absolute inset-0',
       showOverlay: true,
-      overlayClass: 'hero-card-overlay',
-      contentPosition: 'absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10',
-      titleClass: 'font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3',
-      excerptClass: 'text-white/80 text-sm md:text-base line-clamp-2 mb-4',
+      overlayClass: 'bg-gradient-to-t from-[hsl(var(--secondary-hsl))] via-[hsl(var(--secondary-hsl)/0.4)] to-transparent',
+      contentPosition: 'absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10',
+      titleClass: 'neo-heading font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-none mb-4',
+      excerptClass: 'text-white/90 text-base md:text-lg line-clamp-2 mb-5 max-w-xl',
       showExcerpt: true,
       showMeta: true,
-      metaClass: 'text-white/60',
-      badgeVariant: 'light' as const,
+      showReadMore: true,
+      metaClass: 'text-white/70',
+      badgeClass: 'neo-badge',
     },
     medium: {
-      wrapper: 'group relative rounded-2xl overflow-hidden bg-card',
+      wrapper: 'group relative neo-card overflow-hidden bg-card',
+      imageWrapper: 'neo-image-frame',
       imageAspect: 'absolute inset-0',
       showOverlay: true,
-      overlayClass: 'card-overlay',
-      contentPosition: 'absolute bottom-0 left-0 right-0 p-5 z-10',
-      titleClass: 'font-serif text-lg md:text-xl font-semibold text-white leading-snug mb-2',
-      excerptClass: 'text-white/70 text-sm line-clamp-2',
+      overlayClass: 'bg-gradient-to-t from-[hsl(var(--secondary-hsl))] via-[hsl(var(--secondary-hsl)/0.3)] to-transparent',
+      contentPosition: 'absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10',
+      titleClass: 'neo-heading font-serif text-xl md:text-2xl text-white leading-tight mb-2',
+      excerptClass: 'text-white/80 text-sm line-clamp-2 mb-3',
       showExcerpt: true,
       showMeta: true,
-      metaClass: 'text-white/50',
-      badgeVariant: 'light' as const,
+      showReadMore: false,
+      metaClass: 'text-white/60',
+      badgeClass: 'neo-badge',
     },
     standard: {
-      wrapper: 'group ai-card rounded-2xl overflow-hidden bg-card border border-border/50 flex flex-col',
+      wrapper: 'group neo-card neo-stack overflow-hidden bg-card flex flex-col',
+      imageWrapper: '',
       imageAspect: 'aspect-video',
       showOverlay: false,
       overlayClass: '',
-      contentPosition: 'p-4',
-      titleClass: 'font-serif text-base font-medium text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors mb-2',
-      excerptClass: 'text-muted-foreground text-sm line-clamp-2 mb-3',
+      contentPosition: 'p-5 flex flex-col flex-1',
+      titleClass: 'neo-title font-serif text-lg font-bold text-foreground leading-snug line-clamp-2 mb-3',
+      excerptClass: 'text-muted-foreground text-sm line-clamp-2 mb-4 flex-1',
       showExcerpt: true,
       showMeta: true,
+      showReadMore: true,
       metaClass: 'text-muted-foreground',
-      badgeVariant: 'default' as const,
+      badgeClass: 'neo-badge-outline',
     },
     wide: {
-      wrapper: 'group relative rounded-2xl overflow-hidden bg-card flex flex-col md:flex-row min-h-[200px]',
-      imageAspect: 'aspect-video md:aspect-auto md:w-1/2 md:absolute md:inset-y-0 md:left-0',
+      wrapper: 'group neo-card overflow-hidden bg-card flex flex-col md:flex-row min-h-[220px]',
+      imageWrapper: '',
+      imageAspect: 'aspect-video md:aspect-auto md:w-1/2 relative',
       showOverlay: false,
       overlayClass: '',
-      contentPosition: 'p-5 flex flex-col justify-center md:w-1/2 md:ml-auto',
-      titleClass: 'font-serif text-lg font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors mb-2',
-      excerptClass: 'text-muted-foreground text-sm line-clamp-2 mb-3',
+      contentPosition: 'p-5 md:p-6 flex flex-col justify-center md:w-1/2',
+      titleClass: 'neo-title font-serif text-xl font-bold text-foreground leading-snug line-clamp-2 mb-3',
+      excerptClass: 'text-muted-foreground text-sm line-clamp-2 mb-4',
       showExcerpt: true,
       showMeta: true,
+      showReadMore: true,
       metaClass: 'text-muted-foreground',
-      badgeVariant: 'default' as const,
+      badgeClass: 'neo-badge-outline',
     },
     compact: {
-      wrapper: 'group ai-card rounded-xl overflow-hidden bg-card border border-border/50 flex flex-col',
+      wrapper: 'group neo-card neo-tilt overflow-hidden bg-card flex flex-col',
+      imageWrapper: '',
       imageAspect: 'aspect-[4/3]',
       showOverlay: false,
       overlayClass: '',
-      contentPosition: 'p-4',
-      titleClass: 'font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors',
+      contentPosition: 'p-4 flex flex-col flex-1',
+      titleClass: 'neo-title font-serif text-sm font-bold text-foreground leading-snug line-clamp-2 mb-2',
       excerptClass: '',
       showExcerpt: false,
       showMeta: true,
+      showReadMore: false,
       metaClass: 'text-muted-foreground',
-      badgeVariant: 'default' as const,
+      badgeClass: 'neo-badge-outline',
     },
     minimal: {
-      wrapper: 'group ai-card rounded-xl overflow-hidden bg-card border border-border/40 flex flex-col',
+      wrapper: 'group neo-card overflow-hidden bg-card flex flex-col',
+      imageWrapper: '',
       imageAspect: 'aspect-video',
       showOverlay: false,
       overlayClass: '',
-      contentPosition: 'p-3',
-      titleClass: 'font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors',
+      contentPosition: 'p-4',
+      titleClass: 'neo-title font-serif text-sm font-bold text-foreground leading-snug line-clamp-2',
       excerptClass: '',
       showExcerpt: false,
       showMeta: false,
+      showReadMore: false,
       metaClass: '',
-      badgeVariant: 'default' as const,
+      badgeClass: 'neo-badge-outline',
     },
   }
 
@@ -342,27 +359,40 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
   return (
     <Link 
       href={`${basePath}/${post.slug}`}
-      className={`${v.wrapper} ${className} animate-fade-up`}
-      style={{ animationDelay: `${0.05 + index * 0.04}s` }}
+      className={`${v.wrapper} ${className} neo-focus animate-fade-up block`}
+      style={{ animationDelay: `${0.05 + index * 0.06}s` }}
+      aria-label={`Read article: ${post.title}`}
     >
       {/* Image */}
-      <div className={`relative ${v.imageAspect} overflow-hidden`}>
+      <div className={`relative ${v.imageAspect} overflow-hidden ${v.imageWrapper}`}>
         {post.coverSrc ? (
           <Image
             src={post.coverSrc}
-            alt={post.title}
+            alt=""
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes={variant === 'hero' ? '(max-width: 1024px) 100vw, 60vw' : '(max-width: 640px) 100vw, 33vw'}
             priority={variant === 'hero'}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-[hsl(var(--link))]/20" />
+          <div className="absolute inset-0 neo-checker" />
         )}
         
         {/* Overlay for hero/medium variants */}
         {v.showOverlay && (
           <div className={`absolute inset-0 ${v.overlayClass}`} />
+        )}
+
+        {/* Reading time pill on image */}
+        {(variant === 'hero' || variant === 'medium') && (
+          <div className="absolute top-4 right-4 z-10">
+            <span className="neo-pill">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+              </svg>
+              {readTime} min
+            </span>
+          </div>
         )}
       </div>
 
@@ -370,8 +400,8 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
       <div className={v.contentPosition}>
         {/* Category Badge */}
         {category && (
-          <div className="mb-2">
-            <CategoryBadge category={category} variant={v.badgeVariant} />
+          <div className="mb-3">
+            <span className={v.badgeClass}>{category}</span>
           </div>
         )}
 
@@ -387,18 +417,27 @@ function BentoCard({ post, basePath, variant, className = '', index = 0 }: Bento
           </p>
         )}
 
-        {/* Meta */}
-        {v.showMeta && (
-          <div className={`flex items-center gap-2 text-xs ${v.metaClass} mt-auto pt-2`}>
-            {post.author && (
-              <>
-                <span className="font-medium">{post.author}</span>
-                <span>·</span>
-              </>
-            )}
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
-          </div>
-        )}
+        {/* Meta + Read More */}
+        <div className="flex items-center justify-between mt-auto pt-2">
+          {v.showMeta && (
+            <div className={`flex items-center gap-2 text-xs ${v.metaClass}`}>
+              {post.author && (
+                <span className="font-bold">{post.author}</span>
+              )}
+              {post.author && <span className="font-bold">·</span>}
+              <time dateTime={post.date}>{formatDate(post.date)}</time>
+            </div>
+          )}
+
+          {v.showReadMore && (
+            <div className={`flex items-center gap-1 text-sm font-bold ${variant === 'hero' || variant === 'medium' ? 'text-white' : 'text-primary'}`}>
+              <span>Read</span>
+              <svg className="w-4 h-4 neo-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
+          )}
+        </div>
       </div>
     </Link>
   )
@@ -434,18 +473,18 @@ function EmptyState() {
 
 function Footer({ basePath, blogName }: { basePath: string; blogName: string }) {
   return (
-    <footer className="border-t border-border/30 bg-muted/20">
+    <footer className="border-t-4 border-foreground bg-card">
       <div className="mx-auto max-w-7xl px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <Link href={basePath} className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center">
+            <Link href={basePath} className="flex items-center gap-3 mb-4 group">
+              <div className="w-10 h-10 bg-primary border-3 border-foreground flex items-center justify-center group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[4px_4px_0_hsl(var(--secondary-hsl))] transition-all">
                 <svg
-                  className="w-4 h-4 text-white"
+                  className="w-5 h-5 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                 >
                   <path
                     strokeLinecap="round"
@@ -454,21 +493,21 @@ function Footer({ basePath, blogName }: { basePath: string; blogName: string }) 
                   />
                 </svg>
               </div>
-              <span className="font-serif text-xl font-semibold text-foreground">{blogName}</span>
+              <span className="neo-heading font-serif text-2xl text-foreground">{blogName}</span>
             </Link>
-            <p className="text-muted-foreground text-sm max-w-sm">
-              Discover the latest insights about AI and technology.
+            <p className="text-muted-foreground text-base max-w-sm leading-relaxed">
+              Bold insights about AI and technology. No fluff, just substance.
             </p>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Categories</h4>
-            <ul className="space-y-3">
+            <h4 className="neo-subheading text-sm text-foreground mb-5 pb-2 border-b-2 border-foreground inline-block">Categories</h4>
+            <ul className="space-y-3 mt-2">
               {['Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'].map((item) => (
                 <li key={item}>
                   <Link
                     href={basePath}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4 decoration-2 decoration-primary transition-all"
                   >
                     {item}
                   </Link>
@@ -478,13 +517,13 @@ function Footer({ basePath, blogName }: { basePath: string; blogName: string }) 
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Connect</h4>
-            <ul className="space-y-3">
+            <h4 className="neo-subheading text-sm text-foreground mb-5 pb-2 border-b-2 border-foreground inline-block">Connect</h4>
+            <ul className="space-y-3 mt-2">
               {['Twitter', 'GitHub', 'LinkedIn', 'Discord'].map((item) => (
                 <li key={item}>
                   <Link
                     href="#"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4 decoration-2 decoration-primary transition-all"
                   >
                     {item}
                   </Link>
@@ -494,11 +533,11 @@ function Footer({ basePath, blogName }: { basePath: string; blogName: string }) 
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">Built with AI and attention to detail</p>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span>Powered by</span>
-            <span className="ai-gradient-text font-semibold">Next.js</span>
+        <div className="mt-12 pt-8 border-t-4 border-foreground flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm font-bold text-foreground">Built with intention</p>
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-muted-foreground">Powered by</span>
+            <span className="neo-badge">Next.js</span>
           </div>
         </div>
       </div>

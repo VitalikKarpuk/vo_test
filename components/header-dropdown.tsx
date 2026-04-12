@@ -165,87 +165,125 @@ export default function HeaderDropdown() {
         <>
           {/* Backdrop for mobile */}
           <div 
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
           
+          {/* Mobile: Full-width fixed bottom sheet / Desktop: Dropdown */}
           <div
             ref={dropdownRef}
-            className="absolute left-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] md:w-[580px] rounded-2xl bg-[#0a0d14] border border-white/10 shadow-2xl shadow-black/50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
+            className="
+              fixed md:absolute 
+              left-0 md:left-0 
+              right-0 md:right-auto
+              bottom-0 md:bottom-auto
+              top-auto md:top-full 
+              md:mt-2 
+              z-50 
+              w-full md:w-[580px] 
+              max-h-[85vh] md:max-h-[80vh]
+              rounded-t-3xl md:rounded-2xl 
+              bg-[#0a0d14] 
+              border border-white/10 
+              shadow-2xl shadow-black/50 
+              overflow-hidden 
+              animate-in 
+              slide-in-from-bottom md:slide-in-from-top-2 
+              fade-in 
+              duration-300
+            "
           >
-            {/* Products Section */}
-            <div className="p-6">
-              <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-4">
-                Products
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {products.map((product) => (
-                  <Link
-                    key={product.name}
-                    href={product.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors group"
-                  >
-                    {/* Icon container with hexagonal-ish shape */}
-                    <div className="w-10 h-10 rounded-xl border border-[#f48656]/50 bg-[#f48656]/10 flex items-center justify-center text-[#f48656] group-hover:bg-[#f48656]/20 transition-colors">
-                      {getIcon(product.icon)}
-                    </div>
-                    <div>
-                      <div className="text-white font-medium text-sm">{product.name}</div>
-                      <div className="text-white/40 text-xs">{product.description}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+            {/* Mobile drag handle */}
+            <div className="md:hidden flex justify-center py-3">
+              <div className="w-10 h-1 rounded-full bg-white/20" />
             </div>
 
-            {/* Divider */}
-            <div className="mx-6 border-t border-white/10" />
-
-            {/* Links Section */}
-            <div className="p-6 grid grid-cols-2 gap-8">
-              {/* Explorer */}
-              <div>
+            {/* Scrollable content */}
+            <div className="overflow-y-auto max-h-[calc(85vh-3rem)] md:max-h-[80vh]">
+              {/* Products Section */}
+              <div className="p-5 md:p-6">
                 <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-4">
-                  Explorer
+                  Products
                 </h3>
-                <ul className="space-y-3">
-                  {explorerLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`text-sm transition-colors ${
-                          link.highlight
-                            ? 'text-[#f48656] hover:text-[#f48656]/80'
-                            : 'text-white hover:text-white/70'
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
+                  {products.map((product) => (
+                    <Link
+                      key={product.name}
+                      href={product.href}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-colors group"
+                    >
+                      {/* Icon container */}
+                      <div className="w-10 h-10 shrink-0 rounded-xl border border-[#f48656]/50 bg-[#f48656]/10 flex items-center justify-center text-[#f48656] group-hover:bg-[#f48656]/20 transition-colors">
+                        {getIcon(product.icon)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-white font-medium text-sm truncate">{product.name}</div>
+                        <div className="text-white/40 text-xs truncate">{product.description}</div>
+                      </div>
+                    </Link>
                   ))}
-                </ul>
+                </div>
               </div>
 
-              {/* Company */}
-              <div>
-                <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-4">
-                  Company
-                </h3>
-                <ul className="space-y-3">
-                  {companyLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm text-white hover:text-white/70 transition-colors"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+              {/* Divider */}
+              <div className="mx-5 md:mx-6 border-t border-white/10" />
+
+              {/* Links Section */}
+              <div className="p-5 md:p-6 grid grid-cols-2 gap-6 md:gap-8">
+                {/* Explorer */}
+                <div>
+                  <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-3 md:mb-4">
+                    Explorer
+                  </h3>
+                  <ul className="space-y-2.5 md:space-y-3">
+                    {explorerLinks.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`text-sm transition-colors block py-1 ${
+                            link.highlight
+                              ? 'text-[#f48656] hover:text-[#f48656]/80'
+                              : 'text-white hover:text-white/70'
+                          }`}
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Company */}
+                <div>
+                  <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-3 md:mb-4">
+                    Company
+                  </h3>
+                  <ul className="space-y-2.5 md:space-y-3">
+                    {companyLinks.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className="text-sm text-white hover:text-white/70 transition-colors block py-1"
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Mobile close button */}
+              <div className="md:hidden p-5 pt-0">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-full py-3 rounded-xl bg-white/5 text-white/70 text-sm font-medium hover:bg-white/10 active:bg-white/15 transition-colors"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>

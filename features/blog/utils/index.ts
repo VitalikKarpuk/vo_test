@@ -74,12 +74,13 @@ export function mapArticleToPost(article: Article, strapiBaseUrl: string): Mappe
   }
 }
 
-/** Format date to localized string */
+/** Format date to localized string - uses UTC to avoid hydration mismatch */
 export function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   })
 }
 

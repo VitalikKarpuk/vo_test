@@ -50,10 +50,10 @@ export default function CleanBlogPage({
 }: CleanBlogPageProps) {
   const [activeCategory, setActiveCategory] = useState('All')
   const categories = extractCategories(posts)
-  
+
   // Filter posts by category
-  const filteredPosts = activeCategory === 'All' 
-    ? posts 
+  const filteredPosts = activeCategory === 'All'
+    ? posts
     : posts.filter(post => post.categories?.toLowerCase().includes(activeCategory.toLowerCase()))
 
   // Split posts into sections
@@ -85,12 +85,12 @@ export default function CleanBlogPage({
             <div className="mx-auto max-w-6xl">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Main Featured Card - Large */}
-                <div className="lg:col-span-7">
+                <div className="lg:col-span-8">
                   <FeaturedCard post={featuredPost} basePath={basePath} variant="large" />
                 </div>
-                
+
                 {/* Side Cards - Stacked */}
-                <div className="lg:col-span-5 flex flex-col gap-6">
+                <div className="lg:col-span-4 flex flex-col gap-6">
                   {sidePosts.map((post, index) => (
                     <FeaturedCard key={post.id} post={post} basePath={basePath} variant="small" index={index} />
                   ))}
@@ -169,7 +169,7 @@ interface NewsTickerProps {
 
 function NewsTicker({ posts, basePath }: NewsTickerProps) {
   const tickerRef = useRef<HTMLDivElement>(null)
-  
+
   // Auto-scroll animation
   useEffect(() => {
     const ticker = tickerRef.current
@@ -209,7 +209,7 @@ function NewsTicker({ posts, basePath }: NewsTickerProps) {
 
   return (
     <div className="bg-[#101828] text-white overflow-hidden">
-      <div 
+      <div
         ref={tickerRef}
         className="flex items-center gap-8 py-3 px-4 overflow-x-hidden whitespace-nowrap"
       >
@@ -263,7 +263,7 @@ function FeaturedCard({ post, basePath, variant, index = 0 }: FeaturedCardProps)
     >
       <article className="h-full flex flex-col">
         {/* Image - 16:9 aspect ratio */}
-        <div className={`relative overflow-hidden rounded-xl bg-[#f3f4f6] ${isLarge ? 'aspect-[16/10]' : 'aspect-video'}`}>
+        <div className={`relative overflow-hidden rounded-xl bg-[#f3f4f6] ${isLarge ? 'aspect-[16/9]' : 'aspect-video'}`}>
           {post.coverSrc ? (
             <Image
               src={post.coverSrc}

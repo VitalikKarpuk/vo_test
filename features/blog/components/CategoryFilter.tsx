@@ -1,74 +1,66 @@
 'use client'
 
-import { useState } from 'react'
-
 interface CategoryFilterProps {
   categories: string[]
+  activeCategory: string | null
   onSelect?: (category: string | null) => void
 }
 
-export default function CategoryFilter({ categories, onSelect }: CategoryFilterProps) {
-  const [active, setActive] = useState<string | null>(null)
-
+export default function CategoryFilter({ categories, activeCategory, onSelect }: CategoryFilterProps) {
   function handleSelect(cat: string | null) {
-    const next = cat === active ? null : cat
-    setActive(next)
+    if (cat === null) {
+      onSelect?.(null)
+      return
+    }
+    const next = cat === activeCategory ? null : cat
     onSelect?.(next)
   }
 
   return (
     <div className="relative">
-      {/* Fade edge right */}
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-background to-transparent z-10" />
+      {/* Gradient fade on right */}
+      <div 
+        className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-linear-to-l from-background to-transparent" 
+        aria-hidden 
+      />
 
+      {/* Filter buttons container */}
       <div
         role="listbox"
         aria-label="Filter by category"
-        className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 pr-12"
+        className="-mx-1 flex items-center gap-2 overflow-x-auto pb-2 pr-10 scrollbar-none"
       >
-        {/* "All" pill */}
+        {/* "All" button */}
         <button
+          type="button"
           role="option"
-          aria-selected={active === null}
+          aria-selected={activeCategory === null}
           onClick={() => handleSelect(null)}
-          className={[
-            'shrink-0 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-            active === null
-              ? 'bg-primary text-white border-primary shadow-[0_2px_12px_hsl(329_64%_55%_/_0.35)] scale-[1.03]'
-              : 'bg-card text-muted-foreground border-border/60 hover:border-primary/40 hover:text-foreground hover:bg-primary/5',
-          ].join(' ')}
+          className={`relative shrink-0 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
+            activeCategory === null
+              ? 'bg-primary/15 text-primary shadow-sm shadow-primary/20'
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+          }`}
         >
-          <span
-            className={[
-              'w-1.5 h-1.5 rounded-full transition-colors',
-              active === null ? 'bg-white' : 'bg-muted-foreground',
-            ].join(' ')}
-          />
           All
         </button>
 
-        {/* Category pills */}
+        {/* Category buttons */}
         {categories.map((cat) => {
-          const isActive = active === cat
+          const isActive = activeCategory === cat
           return (
             <button
+              type="button"
               key={cat}
               role="option"
               aria-selected={isActive}
               onClick={() => handleSelect(cat)}
-              className={[
-                'shrink-0 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+              className={`relative shrink-0 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                 isActive
-                  ? 'bg-primary text-white border-primary shadow-[0_2px_12px_hsl(329_64%_55%_/_0.35)] scale-[1.03]'
-                  : 'bg-card text-muted-foreground border-border/60 hover:border-primary/40 hover:text-foreground hover:bg-primary/5',
-              ].join(' ')}
+                  ? 'bg-primary/15 text-primary shadow-sm shadow-primary/20'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+              }`}
             >
-              <span
-                className={[
-                  'w-1.5 h-1.5 rounded-full transition-colors duration-300',
-                  isActive ? 'bg-white' : 'bg-primary/40',
-                ].join(' ')}
-              />
               {cat}
             </button>
           )

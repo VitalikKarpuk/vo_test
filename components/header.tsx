@@ -21,17 +21,18 @@ export default function Header({
   navItems = ['Articles', 'Tutorials', 'News', 'Research'],
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 glass-card border-b border-border/30">
-      <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href={basePath} className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center group-hover:animate-pulse-glow transition-all">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/80">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-3.5">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link href={basePath} className="group flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center border border-border bg-background transition-colors group-hover:bg-muted/60">
               <svg
-                className="w-4 h-4 text-white"
+                className="h-4 w-4 text-foreground/80"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}
+                strokeWidth={1.5}
+                aria-hidden
               >
                 <path
                   strokeLinecap="round"
@@ -40,42 +41,42 @@ export default function Header({
                 />
               </svg>
             </div>
-            <span className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            <span className="font-serif text-lg font-medium tracking-tight text-foreground sm:text-xl">
               {blogName}
             </span>
           </Link>
-          
-          {/* Dropdown menu icon */}
+
           <HeaderDropdown />
         </div>
 
         {showNav && (
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
             {navItems.map((item) => (
               <Link
                 key={item}
                 href={`${basePath}/${item.toLowerCase()}`}
-                className="text-sm text-muted-foreground transition-colors hover:text-primary relative group"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
         )}
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-3">
           {showSearch && (
             <button
-              className="p-2 text-muted-foreground transition-colors hover:text-primary"
+              type="button"
+              className="p-2 text-muted-foreground transition-colors hover:text-foreground"
               aria-label="Search"
             >
               <svg
-                className="w-5 h-5"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={1.5}
+                aria-hidden
               >
                 <path
                   strokeLinecap="round"
@@ -86,7 +87,10 @@ export default function Header({
             </button>
           )}
           {showSubscribe && (
-            <button className="btn-primary text-sm py-2 px-4 rounded-xl hidden sm:block">
+            <button
+              type="button"
+              className="hidden border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted sm:inline-flex"
+            >
               Subscribe
             </button>
           )}

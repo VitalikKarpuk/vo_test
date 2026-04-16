@@ -3,6 +3,11 @@
 
 // Components
 export { default as BlogListPage } from './components/BlogListPage'
+export { default as BlogMarqueeTicker } from './components/BlogMarqueeTicker'
+export type { BlogMarqueeTickerProps } from './components/BlogMarqueeTicker'
+export { default as BlogFeaturedSection } from './components/BlogFeaturedSection'
+export type { BlogFeaturedSectionProps } from './components/BlogFeaturedSection'
+export { default as SectionHeading } from './components/SectionHeading'
 export { default as BentoBlogPage } from './components/BentoBlogPage'
 export { default as MinervaBlogPage } from './components/MinervaBlogPage'
 export { default as CleanBlogPage } from './components/CleanBlogPage'

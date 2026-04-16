@@ -58,94 +58,62 @@ export default function TableOfContents({ contentSelector = '.article-body' }: P
     e.preventDefault()
     const el = document.getElementById(id)
     if (!el) return
-    const offset = 96 // top-24 = 6rem = 96px
-    const top = el.getBoundingClientRect().top + window.scrollY - offset
+    const offset = 56 // header height (h-14 = 3.5rem = 56px) + 8px gap
+    const top = el.getBoundingClientRect().top + window.scrollY - offset - 8
     window.scrollTo({ top, behavior: 'smooth' })
     setActiveId(id)
   }
 
   if (headings.length === 0) return null
 
+  const activeIndex = headings.findIndex((h) => h.id === activeId)
+  const progress = headings.length > 0 ? Math.round(((activeIndex + 1) / headings.length) * 100) : 0
+
   return (
-    <aside className="w-full sticky top-24">
-      <div className="sticky top-24">
-        {/* Header */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1 h-4 rounded-full bg-primary shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-widest text-foreground">
-            On this page
-          </span>
-        </div>
-
-        {/* Nav list */}
-        <nav aria-label="Table of contents">
-          <ul className="space-y-0.5">
-            {headings.map((h) => {
-              const isActive = h.id === activeId
-              const indent =
-                h.level === 2 ? 'pl-1' : h.level === 3 ? 'pl-3' : 'pl-5'
-
-              return (
-                <li key={h.id}>
-                  <a
-                    href={`#${h.id}`}
-                    onClick={(e) => handleClick(e, h.id)}
-                    className={[
-                      'group flex items-start gap-2 py-1.5 text-sm leading-snug rounded-lg px-2 transition-all duration-200',
-                      indent,
-                      isActive
-                        ? 'text-primary font-medium bg-primary/6'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/60',
-                    ].join(' ')}
-                  >
-                    {/* Active indicator dot */}
-                    <span
-                      className={[
-                        'mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200',
-                        isActive
-                          ? 'bg-primary scale-125'
-                          : 'bg-border group-hover:bg-muted-foreground',
-                      ].join(' ')}
-                    />
-                    <span className="line-clamp-2">{h.text}</span>
-                  </a>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
-
-        {/* Divider + progress */}
-        <div className="mt-5 pt-4 border-t border-border/40">
-          <TocScrollProgress />
-        </div>
+    <aside className="sticky top-24 w-full">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-5 pb-4 border-b border-border/20">
+        <div className="w-1 h-4 rounded-full bg-primary/70 shrink-0" />
+        <span className="text-[0.6875rem] font-sans font-bold uppercase tracking-widest text-muted-foreground">
+          On this page
+        </span>
       </div>
+
+      {/* Nav list with left rail */}
+      <nav aria-label="Table of contents">
+        <ul className="relative space-y-0">
+          {/* Background rail */}
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-border/25" />
+
+          {headings.map((h) => {
+            const isActive = h.id === activeId
+            const indent =
+              h.level === 2 ? 'pl-3' : h.level === 3 ? 'pl-6' : 'pl-9'
+
+            return (
+              <li key={h.id} className="relative">
+                {/* Active highlight on rail */}
+                {isActive && (
+                  <span className="absolute left-0 top-0 bottom-0 w-px bg-primary transition-none" />
+                )}
+                <a
+                  href={`#${h.id}`}
+                  onClick={(e) => handleClick(e, h.id)}
+                  className={[
+                    'block py-1.5 text-[0.8125rem] leading-snug transition-colors duration-150',
+                    indent,
+                    isActive
+                      ? 'text-foreground font-medium'
+                      : 'text-muted-foreground/55 hover:text-muted-foreground',
+                  ].join(' ')}
+                >
+                  <span className="line-clamp-2">{h.text}</span>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
     </aside>
-  )
-}
-
-function TocScrollProgress() {
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    const update = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0)
-    }
-    window.addEventListener('scroll', update, { passive: true })
-    update()
-    return () => window.removeEventListener('scroll', update)
-  }, [])
-
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 h-1 rounded-full bg-border overflow-hidden">
-        <div
-          className="h-full bg-primary rounded-full transition-all duration-150"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
   )
 }

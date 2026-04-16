@@ -34,7 +34,8 @@ export default async function BlogPostPageRoute({ params }: PageProps) {
       post={post}
       relatedPosts={relatedPosts}
       basePath="/blog"
-      blogName="AI Blog"
+      blogName="Back to Blog"
+      slug={slug}
     />
   )
 }

@@ -1,19 +1,20 @@
 import type { Metadata } from 'next'
-import { CleanBlogPage, getAllArticles } from '@/features/blog'
+import { BlogListPage, getAllArticles } from '@/features/blog'
 
 export const metadata: Metadata = {
-  title: 'AI Blog | Latest Articles on Artificial Intelligence',
-  description: 'Discover the latest insights, tutorials, and news about AI, machine learning, and technology.',
+  title: 'Blog | Crypto & blockchain product updates',
+  description:
+    'News, deep dives, and field notes on our crypto and blockchain product—protocol changes, security, and what ships next.',
 }
 
 export default async function BlogPage() {
   const posts = await getAllArticles()
 
   return (
-    <CleanBlogPage 
+    <BlogListPage
       posts={posts}
       basePath="/blog"
-      blogName="AI Blog"
+      blogName="Blog"
     />
   )
 }

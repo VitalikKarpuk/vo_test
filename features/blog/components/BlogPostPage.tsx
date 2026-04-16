@@ -1,147 +1,174 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import type { MappedPost } from '../types'
-import MDXRenderer from './MDXRenderer'
-import CategoryBadge from './CategoryBadge'
-import TableOfContents from './TableOfContents'
-import ScrollProgress from './ScrollProgress'
-import ShareButtons from './ShareButtons'
-import { formatDate, getReadingTime } from '../utils'
+import Link from "next/link";
+import Image from "next/image";
+import type { MappedPost } from "../types";
+import MDXRenderer from "./MDXRenderer";
+import CategoryBadge from "./CategoryBadge";
+import TableOfContents from "./TableOfContents";
+import ScrollProgress from "./ScrollProgress";
+import ShareButtons from "./ShareButtons";
+import CryptoBackground from "./CryptoBackground";
+import { formatDate, getReadingTime } from "../utils";
 
 interface BlogPostPageProps {
-  post: MappedPost
-  relatedPosts?: MappedPost[]
-  basePath?: string
-  blogName?: string
+  post: MappedPost;
+  relatedPosts?: MappedPost[];
+  basePath?: string;
+  blogName?: string;
+  slug: string;
 }
 
-export default function BlogPostPage({ 
-  post, 
+export default function BlogPostPage({
+  post,
   relatedPosts = [],
-  basePath = '/blog',
-  blogName = 'AI Blog',
+  basePath = "/blog",
+  blogName = "Crypto Blog",
+  slug,
 }: BlogPostPageProps) {
-  const content = (post.excerpt ?? '').replace(/<br>/g, '<br />')
-  const category = post.categories?.split(',')[0]?.trim() || null
-  const readingTime = getReadingTime(content)
+  const content = (post.excerpt ?? "").replace(/<br>/g, "<br />");
+  const category = post.categories?.split(",")[0]?.trim() || null;
+  const readingTime = getReadingTime(content);
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background relative">
       <ScrollProgress />
-      
-      {/* ── Sticky header ── */}
-      <header className="sticky top-0 z-50 glass-card border-b border-border/30">
-        <div className="mx-auto max-w-7xl px-4 py-3.5 flex items-center justify-between">
-          <Link href={basePath} className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-              </svg>
-            </div>
-            <span className="font-serif text-xl font-semibold tracking-tight">{blogName}</span>
-          </Link>
 
-          <Link
-            href={basePath}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors group"
+      {/* ── Back nav ── */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-6">
+        <Link
+          href={basePath}
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 group"
+        >
+          <svg
+            className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
           >
-            <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-            </svg>
-            Back to blog
-          </Link>
-        </div>
-      </header>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
+          </svg>
+          {blogName}
+        </Link>
+      </div>
 
-      {/* ── Hero: cover image — clean, no text overlay ── */}
+      {/* ── Hero ── */}
       {post.coverSrc && (
-        <div className="w-full animate-fade-in">
-          <div className="mx-auto max-w-5xl px-4 pt-10">
-            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-md">
-              <Image
-                src={post.coverSrc}
-                alt={`Cover image for ${post.title}`}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 1024px"
-              />
-            </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-8">
+          <div className="relative w-full aspect-video overflow-hidden rounded-2xl">
+            <Image
+              src={post.coverSrc}
+              alt={`Cover image for ${post.title}`}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              quality={95}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+            {/* Blockchain grid overlay */}
+            <div
+              className="absolute inset-0 opacity-30"
+              style={{
+                backgroundImage: `linear-gradient(hsl(var(--primary)/0.12) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)/0.12) 1px, transparent 1px)`,
+                backgroundSize: "48px 48px",
+              }}
+            />
           </div>
         </div>
       )}
 
-      {/* ── Article header: title + meta, below image ── */}
-      <div className="mx-auto max-w-5xl px-5 sm:px-6">
-        <header className="pt-10 pb-8 border-b border-border/30 animate-fade-up">
-          {/* Category + reading time row */}
-          <div className="flex items-center gap-3 mb-5">
-            {category && <CategoryBadge category={category} variant="default" />}
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {readingTime} min read
-            </span>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        {/* ── Article header ── */}
+        <header className="pt-10 pb-8 border-b border-border/20">
+          {/* Meta row */}
+          <div className="flex flex-col gap-3 mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            {/* Meta items */}
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5">
+              {category && (
+                <CategoryBadge category={category} variant="default" />
+              )}
+              <div className="flex items-center gap-1.5 text-foreground/60">
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span className="text-xs">{readingTime} min read</span>
+              </div>
+              <span className="text-muted-foreground/40">·</span>
+              <time
+                className="text-foreground/60 text-xs"
+                dateTime={post.date}
+              >
+                {formatDate(post.date)}
+              </time>
+              {post.author && (
+                <>
+                  <span className="text-muted-foreground/40">·</span>
+                  <span className="text-foreground/60 text-xs">
+                    {post.author}
+                  </span>
+                </>
+              )}
+            </div>
+            {/* Share buttons */}
+            <div className="shrink-0">
+              <ShareButtons
+                title={post.title}
+                slug={slug}
+                basePath={basePath}
+              />
+            </div>
           </div>
 
           {/* Title */}
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.6rem] font-semibold tracking-tight leading-tight text-balance text-foreground mb-7">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight leading-[1.1] text-foreground mb-6 max-w-3xl">
             {post.title}
           </h1>
-
-          {/* Author + date + share */}
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            {post.author ? (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full ai-gradient flex items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-white">{post.author[0]}</span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">{post.author}</p>
-                  <time className="text-xs text-muted-foreground" dateTime={post.date}>
-                    {formatDate(post.date)}
-                  </time>
-                </div>
-              </div>
-            ) : (
-              <time className="text-sm text-muted-foreground" dateTime={post.date}>
-                {formatDate(post.date)}
-              </time>
-            )}
-
-            {/* Share buttons */}
-            <ShareButtons title={post.title} slug={post.slug} basePath={basePath} />
-          </div>
         </header>
 
         {/* ── Two-column: article body + ToC sidebar ── */}
-        <div className="flex gap-12 py-10 items-start">
-
-          {/* Article body */}
-          <div className="min-w-0 flex-1">
+        <div className="flex gap-14 items-start py-10">
+          {/* Article body — overflow-x-hidden prevents layout blowout; pre/table handle their own scroll */}
+          <div className="min-w-0 flex-1 overflow-x-hidden">
             <div
-              className="article-body prose prose-neutral prose-lg max-w-none animate-fade-up
-                prose-headings:font-serif prose-headings:font-semibold prose-headings:text-foreground
-                prose-p:text-muted-foreground prose-p:leading-relaxed
-                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-foreground
-                prose-code:text-primary prose-code:bg-primary/8 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
-                prose-pre:bg-secondary prose-pre:border prose-pre:border-border/30 prose-pre:rounded-xl
-                prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-                prose-img:rounded-xl prose-img:shadow-sm"
-              style={{ animationDelay: '0.1s' }}
+              className="article-body prose max-w-none
+                prose-headings:font-serif prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
+                prose-h2:text-[1.5rem] prose-h2:leading-tight
+                prose-h3:text-[1.25rem] prose-h3:leading-tight
+                prose-p:text-foreground/80 prose-p:leading-[1.8] prose-p:text-[0.9375rem]
+                prose-li:text-foreground/80
+                prose-a:text-primary prose-a:no-underline prose-a:font-medium hover:prose-a:underline prose-a:transition-colors
+                prose-strong:text-foreground prose-strong:font-semibold
+                prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[0.875em] prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-pre:bg-card prose-pre:border prose-pre:border-border/30 prose-pre:rounded-xl prose-pre:overflow-x-auto
+                prose-blockquote:border-l-2 prose-blockquote:border-primary/40 prose-blockquote:text-foreground/65 prose-blockquote:pl-5 prose-blockquote:not-italic
+                prose-img:rounded-xl prose-img:border prose-img:border-border/20 prose-img:my-8
+                prose-hr:border-border/20
+                prose-th:text-foreground prose-td:text-foreground/80"
             >
               <MDXRenderer source={content} />
             </div>
 
             {/* Tags */}
             {category && (
-              <div className="pt-8 flex flex-wrap gap-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-                {post.categories?.split(',').map((tag) => (
+              <div className="pt-8 flex flex-wrap gap-2">
+                {post.categories?.split(",").map((tag) => (
                   <span
                     key={tag.trim()}
-                    className="px-3 py-1 text-xs font-medium text-muted-foreground bg-muted rounded-full hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-[0.6875rem] font-sans border border-border/30 text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors duration-200 cursor-default"
                   >
                     #{tag.trim()}
                   </span>
@@ -150,107 +177,117 @@ export default function BlogPostPage({
             )}
 
             {/* Footer nav */}
-            <footer className="py-8 border-t border-border/30 mt-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <footer className="py-8 mt-6 border-t border-border/20">
               <Link
                 href={basePath}
-                className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
-                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                  />
                 </svg>
-                Back to all posts
+                {blogName}
               </Link>
             </footer>
           </div>
 
-          {/* ToC sidebar — hidden on mobile, shows from lg */}
-          <div className="hidden lg:block w-60 shrink-0 sticky top-24">
+          {/* ToC sidebar — sticky is handled inside TableOfContents */}
+          <aside className="hidden lg:block w-56 shrink-0 sticky top-24 self-start">
             <TableOfContents contentSelector=".article-body" />
-          </div>
-
+          </aside>
         </div>
       </div>
 
       {/* ── Related posts ── */}
-      {relatedPosts.length > 0 && (
-        <section className="bg-muted/30 border-t border-border/20 py-14 animate-fade-up" style={{ animationDelay: '0.25s' }}>
-          <div className="mx-auto max-w-5xl px-4">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
-              <h2 className="text-xs font-bold uppercase tracking-widest text-primary">Related Articles</h2>
-              <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
+      {/* {relatedPosts.length > 0 && (
+        <section className="border-t border-border/20 py-14">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-[0.6875rem] font-sans font-bold uppercase tracking-widest text-muted-foreground">
+                Related
+              </span>
+              <div className="flex-1 h-px bg-border/20" />
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {relatedPosts.map((p, i) => (
-                <RelatedPostCard key={p.id} post={p} index={i} basePath={basePath} />
+                <RelatedPostCard
+                  key={p.id}
+                  post={p}
+                  index={i}
+                  basePath={basePath}
+                />
               ))}
             </div>
           </div>
         </section>
-      )}
-
-      {/* ── Site footer ── */}
-      <footer className="border-t border-border/30 bg-card/50">
-        <div className="mx-auto max-w-7xl px-4 py-10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <Link href={basePath} className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md ai-gradient flex items-center justify-center">
-              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-              </svg>
-            </div>
-            <span className="font-serif text-base font-semibold text-foreground">{blogName}</span>
-          </Link>
-          <p className="text-xs text-muted-foreground">Built with AI and attention to detail</p>
-        </div>
-      </footer>
+      )} */}
     </main>
-  )
+  );
 }
 
-function RelatedPostCard({ post, index, basePath }: { post: MappedPost; index: number; basePath: string }) {
-  const category = post.categories?.split(',')[0]?.trim() || null
+function RelatedPostCard({
+  post,
+  index,
+  basePath,
+}: {
+  post: MappedPost;
+  index: number;
+  basePath: string;
+}) {
+  const category = post.categories?.split(",")[0]?.trim() || null;
+  console.log("post", post);
 
   return (
     <article
-      className="group ai-card rounded-2xl overflow-hidden bg-card border border-border/50 animate-fade-up"
-      style={{ animationDelay: `${0.1 + index * 0.05}s` }}
+      className="group border border-border/20 rounded-xl overflow-hidden hover:border-border/50 transition-all duration-300 bg-card/20 hover:bg-card/50"
+      style={{ transitionDelay: `${index * 0.03}s` }}
     >
-      <Link href={`${basePath}/${post.slug}`} className="flex flex-col">
-        <div className="relative w-full aspect-video overflow-hidden">
+      <Link href={`${basePath}/${post.slug}`} className="flex flex-col h-full">
+        <div className="relative w-full aspect-video overflow-hidden bg-card">
           {post.coverSrc ? (
             <Image
               src={post.coverSrc}
               alt=""
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-3xl text-primary/20">⟠</span>
+            </div>
           )}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-60" />
         </div>
-
-        <div className="p-4">
+        <div className="p-5 flex flex-col flex-1">
           {category && (
-            <div className="mb-2">
+            <div className="mb-3">
               <CategoryBadge category={category} variant="default" />
             </div>
           )}
-          <h3 className="font-serif text-sm font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-primary transition-colors">
+          <h3 className="text-sm font-semibold text-foreground leading-snug line-clamp-2 mb-auto group-hover:text-primary transition-colors duration-200">
             {post.title}
           </h3>
-          <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="mt-4 pt-3 border-t border-border/20 flex items-center gap-2 text-[0.6875rem] font-sans text-muted-foreground/50">
             {post.author && (
               <>
-                <span className="font-medium text-foreground">{post.author}</span>
+                <span>{post.author}</span>
                 <span>·</span>
               </>
             )}
-            <time>{formatDate(post.date)}</time>
+            <time dateTime={post.date}>{formatDate(post.date)}</time>
           </div>
         </div>
       </Link>
     </article>
-  )
+  );
 }

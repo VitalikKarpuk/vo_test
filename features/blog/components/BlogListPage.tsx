@@ -1,193 +1,237 @@
+'use client'
+
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { MappedPost } from '../types'
-import FeaturedSlider from './FeaturedSlider'
-import CategoryBadge from './CategoryBadge'
+import BlogFeaturedSection from './BlogFeaturedSection'
+import BlogMarqueeTicker from './BlogMarqueeTicker'
 import CategoryFilter from './CategoryFilter'
-import Header from '@/components/header'
 import { formatDate, stripMdx } from '../utils'
 
 interface BlogListPageProps {
   posts: MappedPost[]
   basePath?: string
   blogName?: string
-  showHeader?: boolean
-  showFooter?: boolean
 }
 
-export default function BlogListPage({ 
-  posts, 
-  basePath = '/blog',
-  blogName = 'AI Blog',
-  showHeader = true,
-  showFooter = true,
-}: BlogListPageProps) {
-  // Extract unique categories from all posts (sorted alphabetically)
-  const allCategories = Array.from(
+function collectCategories(posts: MappedPost[]): string[] {
+  return Array.from(
     new Set(
       posts
         .flatMap((p) => (p.categories ? p.categories.split(',').map((c) => c.trim()) : []))
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   ).sort()
+}
 
-  // Split posts: first 5 go to slider, rest to grids
-  const sliderPosts = posts.slice(0, 5)
-  const latestPosts = posts.slice(5, 11)
-  const remainingPosts = posts.slice(11)
+function filterByCategory(posts: MappedPost[], category: string | null): MappedPost[] {
+  if (!category) return posts
+  const needle = category.toLowerCase()
+  return posts.filter((p) =>
+    (p.categories ?? '')
+      .split(',')
+      .some((c) => c.trim().toLowerCase() === needle),
+  )
+}
+
+export default function BlogListPage({
+  posts,
+  basePath = '/blog',
+  blogName = 'Blog',
+}: BlogListPageProps) {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
+  const allCategories = useMemo(() => collectCategories(posts), [posts])
+  const filteredPosts = useMemo(
+    () => filterByCategory(posts, activeCategory),
+    [posts, activeCategory],
+  )
+
+  const primaryFeatured = filteredPosts[0]
+  const secondaryFeatured = filteredPosts.slice(1, 3)
+  const archivePosts = filteredPosts.slice(3)
 
   if (posts.length === 0) {
     return (
-      <main className="min-h-screen bg-background">
-        {showHeader && <Header basePath={basePath} blogName={blogName} />}
-        <section className="mx-auto max-w-7xl px-4 py-20">
+      <main className="blog-editorial-shell relative min-h-screen overflow-x-hidden text-foreground">
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <EmptyState />
         </section>
-        {showFooter && <Footer basePath={basePath} blogName={blogName} />}
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      {showHeader && <Header basePath={basePath} blogName={blogName} />}
+    <main className="blog-editorial-shell relative min-h-screen overflow-x-hidden text-foreground">
+      <BlogMarqueeTicker posts={posts} basePath={basePath} />
 
-      {/* Featured Slider */}
-      {sliderPosts.length > 0 && (
-        <section className="px-4 pt-8 pb-10 animate-fade-up">
-          <div className="mx-auto max-w-7xl">
-            <SectionHeading color="primary" label="Featured" />
-            <FeaturedSlider posts={sliderPosts} basePath={basePath} />
+      <BlogHeroSection blogName={blogName} />
+
+      {filteredPosts.length === 0 && activeCategory !== null && (
+        <section className="px-4 py-16 sm:px-6">
+          <div className="mx-auto max-w-md animate-fade-rise text-center">
+            <p className="mb-2 font-sans text-xl font-light tracking-tight text-foreground text-balance sm:text-2xl">
+              No posts in this topic
+            </p>
+            <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
+              Nothing is tagged &ldquo;{activeCategory}&rdquo; yet. Pick another topic or clear the filter to see all
+              posts.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveCategory(null)}
+              className="border border-border bg-background px-5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              Show all posts
+            </button>
           </div>
         </section>
       )}
 
-      {/* Latest Articles — 3-column grid */}
-      {latestPosts.length > 0 && (
-        <section className="px-4 py-10 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+      {primaryFeatured && filteredPosts.length > 0 && (
+        <BlogFeaturedSection
+          primary={primaryFeatured}
+          secondaries={secondaryFeatured}
+          basePath={basePath}
+        />
+      )}
+
+      {(allCategories.length > 0 || archivePosts.length > 0) && (
+        <section
+          className="px-4 py-8 sm:px-6 sm:py-8 lg:py-12"
+          aria-labelledby={archivePosts.length > 0 ? 'archive-heading' : undefined}
+        >
           <div className="mx-auto max-w-7xl">
-            <SectionHeading color="primary" label="Latest Articles" />
+            {allCategories.length > 0 && (
+              <div className="mb-8">
+                <CategoryFilter
+                  categories={allCategories}
+                  activeCategory={activeCategory}
+                  onSelect={setActiveCategory}
+                />
+              </div>
+            )}
 
-            {/* Category filter row */}
-            <div className="mb-7">
-              <CategoryFilter categories={allCategories} />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {latestPosts.map((post, index) => (
-                <PostCard key={post.id} post={post} index={index} basePath={basePath} />
-              ))}
-            </div>
+            {archivePosts.length > 0 && (
+              <div>
+                <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {archivePosts.map((post) => (
+                    <li key={post.id} className="flex">
+                      <PostCard post={post} basePath={basePath} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </section>
       )}
-
-      {/* More to Explore — 4-column grid */}
-      {remainingPosts.length > 0 && (
-        <section className="px-4 py-10 bg-muted/30 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <div className="mx-auto max-w-7xl">
-            <SectionHeading color="link" label="More to Explore" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {remainingPosts.map((post, index) => (
-                <PostCard key={post.id} post={post} index={index} compact basePath={basePath} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {showFooter && <Footer basePath={basePath} blogName={blogName} />}
     </main>
   )
 }
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
-
-function SectionHeading({ label, color }: { label: string; color: 'primary' | 'link' }) {
-  const colorClass =
-    color === 'primary'
-      ? 'bg-primary text-primary'
-      : 'bg-[hsl(var(--link))] text-[hsl(var(--link))]'
-  const gradientClass =
-    color === 'primary'
-      ? 'from-primary/30'
-      : 'from-[hsl(var(--link))]/30'
-
+function BlogHeroSection({ blogName }: { blogName: string }) {
   return (
-    <div className="flex items-center gap-4 mb-6">
-      <div className="flex items-center gap-2">
-        <span className={`w-2 h-2 rounded-full ${colorClass.split(' ')[0]} animate-pulse-glow`} />
-        <h2 className={`text-sm font-semibold uppercase tracking-widest ${colorClass.split(' ')[1]}`}>
-          {label}
-        </h2>
+    <section
+      className="border-b border-border px-4 pb-6 pt-16 sm:px-6 sm:pb-6 sm:pt-20 mb-6"
+      aria-labelledby="blog-title"
+    >
+      <div className="mx-auto max-w-7xl">
+        <header className="min-w-0 max-w-3xl">
+          <h1
+            id="blog-title"
+            className="text-balance font-serif text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] font-bold leading-[1.1] tracking-[-0.02em] bg-linear-to-r from-primary via-[#c084fc] to-link bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(232,121,249,0.3)]"
+          >
+            {blogName}
+          </h1>
+        </header>
       </div>
-      <div className={`flex-1 h-px bg-gradient-to-r ${gradientClass} to-transparent`} />
-    </div>
+    </section>
   )
 }
 
 function PostCard({
   post,
-  index,
-  compact = false,
   basePath = '/blog',
 }: {
   post: MappedPost
-  index: number
-  compact?: boolean
   basePath?: string
 }) {
   const category = post.categories?.split(',')[0]?.trim() || null
   const plainExcerpt = stripMdx(post.excerpt || '')
 
   return (
-    <article
-      className="group ai-card rounded-2xl overflow-hidden bg-card border border-border/50 animate-fade-up flex flex-col"
-      style={{ animationDelay: `${0.05 + index * 0.04}s` }}
-    >
-      <Link href={`${basePath}/${post.slug}`} className="flex flex-col flex-1">
-        {/* 16:9 image — no overlay, no badge on top */}
-        <div className="relative w-full aspect-video overflow-hidden">
+    <article className="group flex flex-col h-full">
+      <Link
+        href={`${basePath}/${post.slug}`}
+        className="flex flex-1 flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
+      >
+        {/* Image Container */}
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-lg bg-muted transition-all duration-300">
           {post.coverSrc ? (
             <Image
               src={post.coverSrc}
               alt={post.title}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:brightness-95"
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50" />
-          )}
-        </div>
-
-        {/* Text content */}
-        <div className="p-4 md:p-5 flex flex-col flex-1">
-          {/* Category badge inside text block, above title */}
-          {category && (
-            <div className="mb-2">
-              <CategoryBadge category={category} variant="default" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary via-primary/80 to-secondary/60 flex items-center justify-center">
+              <span className="text-white/30 text-6xl font-bold font-serif">
+                {post.title.charAt(0).toUpperCase()}
+              </span>
             </div>
           )}
+          {/* Overlay gradient on hover */}
+          <div className="absolute inset-0 bg-linear-to-t from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Shadow on hover */}
+          <div className="absolute inset-0 shadow-lg shadow-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg" />
+        </div>
 
-          <h3 className="font-serif text-base font-medium text-foreground leading-snug line-clamp-2 text-balance group-hover:text-primary transition-colors mb-2">
+        {/* Content Container */}
+        <div className="mt-6 flex flex-1 flex-col gap-4">
+          {/* Meta: date + category */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] font-medium">
+            <time 
+              dateTime={post.date} 
+              className="tabular-nums text-muted-foreground group-hover:text-foreground/80 transition-colors"
+            >
+              {formatDate(post.date)}
+            </time>
+            {category && (
+              <>
+                <span className="text-border/50">·</span>
+                <span className="text-primary font-semibold uppercase tracking-[0.08em]">
+                  {category}
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="text-xl lg:text-[1.375rem] font-semibold text-foreground leading-snug group-hover:text-primary transition-colors duration-200">
             {post.title}
           </h3>
 
-          {!compact && plainExcerpt && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
-              {plainExcerpt}
-            </p>
-          )}
+          {/* Excerpt */}
+          <p className="text-muted-foreground group-hover:text-foreground/75 line-clamp-2 text-base leading-relaxed transition-colors duration-200 flex-1">
+            {plainExcerpt || 'Читать статью'}
+          </p>
 
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-auto pt-3 border-t border-border/40">
-            {post.author && (
-              <>
-                <span className="font-medium text-foreground">{post.author}</span>
-                <span>·</span>
-              </>
-            )}
-            <time>{formatDate(post.date)}</time>
+          {/* CTA - Read More */}
+          <div className="flex items-center gap-2 text-primary font-medium text-sm pt-2 group-hover:gap-3 transition-all duration-200">
+            <span>Read article</span>
+            <svg 
+              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor" 
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
           </div>
         </div>
       </Link>
@@ -195,18 +239,17 @@ function PostCard({
   )
 }
 
-
-
 function EmptyState() {
   return (
-    <div className="text-center py-20 animate-fade-up">
-      <div className="mx-auto w-20 h-20 rounded-2xl ai-gradient flex items-center justify-center mb-6 animate-float">
+    <div className="text-center">
+      <div className="mx-auto mb-8 flex h-12 w-12 items-center justify-center border border-border">
         <svg
-          className="w-10 h-10 text-white"
+          className="h-5 w-5 text-muted-foreground"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
           strokeWidth={1.5}
+          aria-hidden
         >
           <path
             strokeLinecap="round"
@@ -215,82 +258,13 @@ function EmptyState() {
           />
         </svg>
       </div>
-      <h3 className="font-serif text-2xl font-medium text-foreground mb-3">No articles yet</h3>
-      <p className="text-muted-foreground max-w-md mx-auto">
-        Check back soon for new content about AI and technology, or make sure your backend is
-        connected.
+      <h3 className="mb-3 text-2xl font-light tracking-tight text-foreground text-balance sm:text-3xl">
+        No articles yet
+      </h3>
+      <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
+        New posts on infrastructure, security, and shipping on-chain will appear here once content is published or your
+        CMS is connected.
       </p>
     </div>
-  )
-}
-
-function Footer({ basePath, blogName }: { basePath: string; blogName: string }) {
-  return (
-    <footer className="border-t border-border/30 bg-muted/20">
-      <div className="mx-auto max-w-7xl px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="md:col-span-2">
-            <Link href={basePath} className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg ai-gradient flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
-                  />
-                </svg>
-              </div>
-              <span className="font-serif text-xl font-semibold text-foreground">{blogName}</span>
-            </Link>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Categories</h4>
-            <ul className="space-y-3">
-              {['Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'].map((item) => (
-                <li key={item}>
-                  <Link
-                    href={basePath}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Connect</h4>
-            <ul className="space-y-3">
-              {['Twitter', 'GitHub', 'LinkedIn', 'Discord'].map((item) => (
-                <li key={item}>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">Built with AI and attention to detail</p>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span>Powered by</span>
-            <span className="ai-gradient-text font-semibold">Next.js</span>
-          </div>
-        </div>
-      </div>
-    </footer>
   )
 }

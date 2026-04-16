@@ -148,10 +148,10 @@ export default function HeaderDropdown() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className={`p-2 rounded-lg transition-all duration-200 ${
+        className={`rounded-md p-2 transition-colors duration-200 ${
           isOpen
-            ? 'bg-[#f48656]/10 text-[#f48656]'
-            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            ? 'bg-muted text-foreground'
+            : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
         }`}
         aria-expanded={isOpen}
         aria-haspopup="true"

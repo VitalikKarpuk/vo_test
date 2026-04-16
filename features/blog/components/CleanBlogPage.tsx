@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { MappedPost } from '../types'
 import { stripMdx } from '../utils'
+import BlogMarqueeTicker from './BlogMarqueeTicker'
 
 interface CleanBlogPageProps {
   posts: MappedPost[]
@@ -64,7 +65,7 @@ export default function CleanBlogPage({
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Horizontal Scrolling News Ticker */}
-      <NewsTicker posts={posts} basePath={basePath} />
+      <BlogMarqueeTicker posts={posts} basePath={basePath} />
 
       <main className="relative">
         {/* Page Header */}
@@ -154,85 +155,6 @@ export default function CleanBlogPage({
 
       {/* Footer */}
       <Footer blogName={blogName} />
-    </div>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   NEWS TICKER - Horizontal scrolling news bar
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-interface NewsTickerProps {
-  posts: MappedPost[]
-  basePath: string
-}
-
-function NewsTicker({ posts, basePath }: NewsTickerProps) {
-  const tickerRef = useRef<HTMLDivElement>(null)
-
-  // Auto-scroll animation
-  useEffect(() => {
-    const ticker = tickerRef.current
-    if (!ticker) return
-
-    let animationId: number
-    let scrollPos = 0
-    const scrollSpeed = 0.5
-
-    const animate = () => {
-      scrollPos += scrollSpeed
-      if (scrollPos >= ticker.scrollWidth / 2) {
-        scrollPos = 0
-      }
-      ticker.scrollLeft = scrollPos
-      animationId = requestAnimationFrame(animate)
-    }
-
-    animationId = requestAnimationFrame(animate)
-
-    // Pause on hover
-    const handleMouseEnter = () => cancelAnimationFrame(animationId)
-    const handleMouseLeave = () => { animationId = requestAnimationFrame(animate) }
-
-    ticker.addEventListener('mouseenter', handleMouseEnter)
-    ticker.addEventListener('mouseleave', handleMouseLeave)
-
-    return () => {
-      cancelAnimationFrame(animationId)
-      ticker.removeEventListener('mouseenter', handleMouseEnter)
-      ticker.removeEventListener('mouseleave', handleMouseLeave)
-    }
-  }, [])
-
-  // Duplicate posts for seamless loop
-  const tickerItems = [...posts, ...posts]
-
-  return (
-    <div className="bg-[#101828] text-white overflow-hidden">
-      <div
-        ref={tickerRef}
-        className="flex items-center gap-8 py-3 px-4 overflow-x-hidden whitespace-nowrap"
-      >
-        {tickerItems.map((post, index) => {
-          const category = post.categories?.split(',')[0]?.trim()
-          return (
-            <Link
-              key={`${post.id}-${index}`}
-              href={`${basePath}/${post.slug}`}
-              className="flex items-center gap-3 shrink-0 group"
-            >
-              {category && (
-                <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#d6438f] text-white rounded">
-                  {category}
-                </span>
-              )}
-              <span className="text-sm text-white/80 group-hover:text-white transition-colors">
-                {post.title}
-              </span>
-            </Link>
-          )
-        })}
-      </div>
     </div>
   )
 }

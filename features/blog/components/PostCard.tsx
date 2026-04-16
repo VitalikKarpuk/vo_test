@@ -44,7 +44,7 @@ export default function PostCard({
       >
         <article className="ai-card flex flex-col md:flex-row gap-6 bg-card rounded-xl overflow-hidden border border-border/50 p-4 md:p-5">
           {/* Image */}
-          <div className="relative w-full md:w-72 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden flex-shrink-0 image-hover-zoom">
+          <div className="relative w-full md:w-72 aspect-video rounded-lg overflow-hidden flex-shrink-0 image-hover-zoom">
             {article.coverSrc ? (
               <Image
                 src={article.coverSrc}
@@ -150,7 +150,7 @@ export default function PostCard({
         className="group block animate-scale-in relative"
         style={{ animationDelay: `${index * 0.1}s` }}
       >
-        <article className="ai-card ai-border relative aspect-[16/10] rounded-2xl overflow-hidden">
+        <article className="ai-card ai-border relative aspect-video rounded-2xl overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0 image-hover-zoom">
             {article.coverSrc ? (

@@ -1,58 +1,16 @@
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
+import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// Area font - основной шрифт
-const fontArea = localFont({
-  src: [
-    {
-      path: '../public/fonts/Area-Extralight.otf',
-      weight: '200',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Light.otf',
-      weight: '300',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Regular.otf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Medium.otf',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Semibold.otf',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Bold.otf',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Extrabold.otf',
-      weight: '800',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/Area-Black.otf',
-      weight: '900',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-area',
+const fontInter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
-  fallback: ['system-ui', 'sans-serif'],
 })
 
-// Whyte font - дополнительный шрифт
+// Whyte — display / headings
 const fontWhyte = localFont({
   src: [
     {
@@ -100,10 +58,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${fontArea.variable} ${fontWhyte.variable} scroll-smooth`} data-scroll-behavior="smooth">
-      <body className="font-sans antialiased">
+    <html
+      lang="en"
+      className={`${fontInter.variable} ${fontWhyte.variable} scroll-smooth`}
+      data-scroll-behavior="smooth"
+    >
+      <body className="font-sans">
         {children}
-        <Analytics />
       </body>
     </html>
   )
